@@ -1,0 +1,5 @@
+rjConfig	KEYWORD1
+loadConfig	KEYWORD2
+saveConfig	KEYWORD2
+printConfig	KEYWORD2
+resetConfig	KWYWORD2
