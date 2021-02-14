@@ -1,6 +1,7 @@
 #include "weather.h"
 
 /*******************************************************/
+// Function  : Public  function
 // Purpose   : Get weather update from OpenWeatherMap using API
 // Paramters : None
 // Returns   : None - sets arrays with weather data
@@ -21,7 +22,6 @@ void getCurrentWeather() {
 
   yield();    // allow program to continue running while we wait for response
 
-  // then save weather information for later use
 
   // to change below code
   //   if ( parsed ) {
@@ -33,11 +33,12 @@ void getCurrentWeather() {
 }
 
 /*******************************************************/
+// Function  : Private function
 // Purpose   :
 // Paramters : None
 // Returns   : Returns string with time of last updated
 //           : Example 03:28
 /*******************************************************/
-String lastWeatherUpdateDateTime() {
-  return dateTime(lastWeatherUpdate, "H:i");
-}
+// String lastWeatherUpdateDateTime() {
+//   return dateTime(lastWeatherUpdate, "H:i");
+// }

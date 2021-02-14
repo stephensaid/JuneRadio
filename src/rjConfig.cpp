@@ -2,11 +2,9 @@
 
 #include "rjConfig.h"
 
-#define _conFilename "/config.txt"
-
-rjConfig::rjConfig() {
-  // _conFilename = "/config.txt";
-}
+// rjConfig::rjConfig() {
+//
+// }
 
 void rjConfig::loadConfig() {
   loadConfiguration(_conFilename, element);

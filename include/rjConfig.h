@@ -16,6 +16,8 @@
 #define TFT_YELLOW      0xFFE0      /* 255, 255,   0 */
 #define TFT_BLUE        0x001F      /*   0,   0, 255 */
 
+#define _conFilename "/config.txt"
+
 class rjConfig {
   public:
     void loadConfig();

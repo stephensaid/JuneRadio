@@ -1,5 +1,8 @@
 // Libraries
 #include <Arduino.h>
+#include <rjConfig.h>               // program configuration
+#include <settings.h>               // program settings
+#include <defaults.h>               // program defaults
 #include <SPI.h>                    // TFT library https://github.com/Bodmer/TFT_eSPI
 #include <TFT_eSPI.h>               // Hardware-specific library
 #include <WiFi.h>                   // Wifi library
@@ -12,10 +15,7 @@
 #include <OpenWeather.h>
 #include <EasyButton.h>
 #include <ESPRotary.h>
-#include <rjConfig.h>
-#include <settings.h>
-#include <defaults.h>               // program settings
-
+#include <weather.h>
 
 /********* INITIALIZATION CODE *********/
 // Encoders setup
@@ -44,7 +44,7 @@ enum radioModeEnum {
   internetRadio,
   dabRadio,
   fmRadio,
-  MP3,
+  // MP3,
   savedStations,
   last = savedStations
 } radioMode;          // enumaration for modes
@@ -142,28 +142,22 @@ void lowerTftLED();
 //time
 void getInternetTime();
 
-// DSW_current *current;
-// DSW_hourly *hourly;
-// DSW_daily  *daily;
-
-/********** Event handles **************/
-static uint8_t timeScreenHandle;      // 1
-static uint8_t weatherScreenHandle;   // 2
-static uint8_t radioScreenHandle;     // 3
-static uint8_t topbarHandle;          // 4
-static uint8_t weatherUpdateHandle;   // 5
-static uint8_t alarm1Handle;          // 6
-static uint8_t alarm2Handle;          // 7
-static uint8_t alarm3Handle;          // 8
-static uint8_t alarm1SnoozeHandle;    // 9
-static uint8_t alarm2SnoozeHandle;    // 10
-static uint8_t alarm3SnoozeHandle;    // 11
-// 12
-// 13
-// 14
-static uint8_t nowEvent;              // 15
-
-#include <weather.h>
+// /********** Event handles **************/
+// static uint8_t timeScreenHandle;      // 1
+// static uint8_t weatherScreenHandle;   // 2
+// static uint8_t radioScreenHandle;     // 3
+// static uint8_t topbarHandle;          // 4
+// static uint8_t weatherUpdateHandle;   // 5
+// static uint8_t alarm1Handle;          // 6
+// static uint8_t alarm2Handle;          // 7
+// static uint8_t alarm3Handle;          // 8
+// static uint8_t alarm1SnoozeHandle;    // 9
+// static uint8_t alarm2SnoozeHandle;    // 10
+// static uint8_t alarm3SnoozeHandle;    // 11
+// // 12
+// // 13
+// // 14
+// static uint8_t nowEvent;              // 15
 
 /********** Global variables **************/
 /* MOVE TO SETTINGS FILE WHEN READY *******/

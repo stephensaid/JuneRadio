@@ -20,10 +20,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
- 
+
 #include <WiFi.h>
 #include <WiFiClient.h>
-#include <ESPHTTPClient.h>
+#include <HTTPClient.h>
 #include "OpenWeather.h"
 
 OpenWeatherMapCurrent::OpenWeatherMapCurrent() {
