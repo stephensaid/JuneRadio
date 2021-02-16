@@ -422,6 +422,7 @@ void getInternetTime() {
     Serial.println(myTZ.dateTime());
     myTZ.setDefault();
   } else {
+    Serial.print("getInternetTime::Set time using compileTime.");
     myTZ.setPosix(LOCALTZ_POSIX);
     myTZ.setTime(compileTime());
   }
