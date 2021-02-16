@@ -12,7 +12,7 @@
 * DAB Radio
 * FM Radio (possibly)
 * MP3 player
-* Favorite stations
+* Favourite stations
 * Weather station
 * Time and alarm functions
 

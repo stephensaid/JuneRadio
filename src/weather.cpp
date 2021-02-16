@@ -1,7 +1,9 @@
 #include "weather.h"
 
-OpenWeatherMapCurrent client;         // initiate the client
-WiFiClient wifiClient;                // Initiate WiFi client
+OpenWeatherMapCurrent weatherClient;           // initiate the client
+WiFiClient wifiClient;                  // Initiate WiFi client
+OpenWeatherMapCurrentData weatherData;  // stores weather data in weatherData
+time_t lastWeatherUpdate;
 
 /*******************************************************/
 // Function  : Public  function
@@ -18,12 +20,15 @@ void getCurrentWeather() {
 
   Serial.println("getCurrentWeather()::Requesting weather information from OpenWeatherMap.org...");
 
-  OpenWeatherMapCurrentData data;
-  client.setLanguage(OPEN_WEATHER_MAP_LANGUAGE);
-  client.setMetric(IS_METRIC);
-  client.updateCurrentById(&data, OPEN_WEATHER_MAP_APP_ID, OPEN_WEATHER_MAP_LOCATION_ID);
+  weatherClient.setLanguage(OPEN_WEATHER_MAP_LANGUAGE);
+  weatherClient.setMetric(IS_METRIC);
+  weatherClient.updateCurrentById(&weatherData, OPEN_WEATHER_MAP_APP_ID, OPEN_WEATHER_MAP_LOCATION_ID);
 
   yield();    // allow program to continue running while we wait for response
+
+  lastWeatherUpdate = now();
+  Serial.print("getCurrentWeather()::Last weather forecast updated: ");
+  Serial.println( lastWeatherUpdateDateTime() );
 
 
   // to change below code
@@ -42,6 +47,6 @@ void getCurrentWeather() {
 // Returns   : Returns string with time of last updated
 //           : Example 03:28
 /*******************************************************/
-// String lastWeatherUpdateDateTime() {
-//   return dateTime(lastWeatherUpdate, "H:i");
-// }
+String lastWeatherUpdateDateTime() {
+  return dateTime(lastWeatherUpdate, "H:i");
+}

@@ -2,7 +2,9 @@
 #include <Arduino.h>
 #include <rjConfig.h>               // program configuration
 #include <defaults.h>               // program defaults
-#include <helpers.h>
+#include <helpers.h>                // helper functions
+#include <weather.h>                // weather functions
+#include <tft.h>                    // tft related functions
 
 #include <SPI.h>                    // TFT library https://github.com/Bodmer/TFT_eSPI
 #include <TFT_eSPI.h>               // Hardware-specific library
@@ -16,7 +18,6 @@
 #include <OpenWeather.h>
 #include <EasyButton.h>
 #include <ESPRotary.h>
-#include <weather.h>
 
 
 /********* INITIALIZATION CODE *********/
@@ -79,12 +80,6 @@ enum menu_alarms {
   m_alarm_LAST = m_alarm3
 };
 
-enum topbar {
-  mini,   // icons only
-  basic,  // date and icons
-  full    // date, icons and time
-};
-
 // /********* PROTOTYPES ******************/
 // //buttons
 // void btnMenuPressed();
@@ -98,17 +93,6 @@ void btnVolumePressed();
 void selectorChanged(ESPRotary& r);
 void volumeChanged(ESPRotary& r);
 //
-// //functions
-// void deleteEvents();
-// void wait(unsigned long d);
-// void print_wakeup_reason();
-//
-// //images
-// bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap);
-//
-// // internet
-// int Start_WiFi();
-//
 // // menus
 // String items_main (menu_main m);
 // String items_settings (menu_settings m);
@@ -117,19 +101,6 @@ void volumeChanged(ESPRotary& r);
 //
 // // radio
 // void selectRadioMode();
-//
-// // tft
-// void displayWelcomeScreen();
-// void waitWelcomeScreen();
-// void paintTimeModeScreen();
-// void paintWeatherModeScreen();
-// void paintRadioScreen();
-// void topBar(topbar t = basic);
-// void resetTFTlight();
-// void lowerTftLED();
-//
-// //time
-// void getInternetTime();
 
 
 void setup() {
@@ -218,16 +189,16 @@ void setup() {
   //4.setColorDepth(16);                // 16 bit colour needed to show antialiased fonts
   TJpgDec.setCallback(tft_output);      // The decoder must be given the exact name of the rendering function above
 
-  // displayWelcomeScreen();
+  displayWelcomeScreen();
 
   Start_WiFi();
 
   void setInterval(uint16_t hour = 1);  // update internet time every 1 hour
-  // getCurrentWeather();
-  //
-  // // volume.setLimitsHandler(volume_lower_bound, volume_upper_bound);
-  // volume.resetPosition();
-  //
+  getCurrentWeather();
+
+  // volume.setLimitsHandler(volume_lower_bound, volume_upper_bound);
+  volume.resetPosition();
+
   attachInterrupt(SELECTOR_A_PIN, selector_interrupt, CHANGE);
   attachInterrupt(SELECTOR_B_PIN, selector_interrupt, CHANGE);
 

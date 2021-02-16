@@ -7,9 +7,7 @@
 #include <ezTime.h>
 #include <OpenWeather.h>
 
-  // class weather {
-  //   public:
-  //     void getCurrentWeather();
-  // };
+void getCurrentWeather();
+String lastWeatherUpdateDateTime();
 
 #endif // weather_h
