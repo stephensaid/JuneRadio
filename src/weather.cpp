@@ -1,5 +1,8 @@
 #include "weather.h"
 
+OpenWeatherMapCurrent client;         // initiate the client
+WiFiClient wifiClient;                // Initiate WiFi client
+
 /*******************************************************/
 // Function  : Public  function
 // Purpose   : Get weather update from OpenWeatherMap using API
