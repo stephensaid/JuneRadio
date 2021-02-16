@@ -417,7 +417,9 @@ int Start_WiFi() {
 void getInternetTime() {
   if ( WiFi.status() == WL_CONNECTED ) {
     waitForSync();
-    myTZ.setLocation(F("mt"));
+    // myTZ.setLocation(F("mt"));
+    // myTZ.setLocation("mt");
+    myTZ.setPosix(LOCALTZ_POSIX);
     Serial.print("getInternetTime::Updated internet time: ");
     Serial.println(myTZ.dateTime());
     myTZ.setDefault();
