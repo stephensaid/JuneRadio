@@ -84,80 +84,64 @@ enum topbar {
   full    // date, icons and time
 };
 
-/********* PROTOTYPES ******************/
-//buttons
-void btnMenuPressed();
-void btnStandbyPressed();
-void btnSnoozePressed();
-void btnModePressed();
+// /********* PROTOTYPES ******************/
+// //buttons
+// void btnMenuPressed();
+// void btnStandbyPressed();
+// void btnSnoozePressed();
+// void btnModePressed();
+//
+// //encoder_routines
+// void btnSelectorPressed();
+// void btnVolumePressed();
+// void selectorChanged(ESPRotary& r);
+// void volumeChanged(ESPRotary& r);
+//
+// //functions
+// void deleteEvents();
+// void wait(unsigned long d);
+// void print_wakeup_reason();
+//
+// //helpers
+// int getDecimal(float f, int decimal);
+// void btnSelectorInterruptISR();
+// void btnVolumeInterruptISR();
+// void btnModeInterruptISR();
+// void btnStandbyInterruptISR();
+// void btnSnoozeInterruptISR();
+// void btnMenuInterruptISR();
+// void selector_interrupt();
+// void volume_interrupt();
+// void listAllFiles();
+//
+// //images
+// bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap);
+//
+// // internet
+// int Start_WiFi();
+//
+// // menus
+// String items_main (menu_main m);
+// String items_settings (menu_settings m);
+// void setButtonDefaultOff();
+// void setButtonDefaultOn();
+//
+// // radio
+// void selectRadioMode();
+//
+// // tft
+// void displayWelcomeScreen();
+// void waitWelcomeScreen();
+// void paintTimeModeScreen();
+// void paintWeatherModeScreen();
+// void paintRadioScreen();
+// void topBar(topbar t = basic);
+// void resetTFTlight();
+// void lowerTftLED();
+//
+// //time
+// void getInternetTime();
 
-//encoder_routines
-void btnSelectorPressed();
-void btnVolumePressed();
-void selectorChanged(ESPRotary& r);
-void volumeChanged(ESPRotary& r);
-
-//functions
-void deleteEvents();
-void wait(unsigned long d);
-void print_wakeup_reason();
-
-//helpers
-int getDecimal(float f, int decimal);
-void btnSelectorInterruptISR();
-void btnVolumeInterruptISR();
-void btnModeInterruptISR();
-void btnStandbyInterruptISR();
-void btnSnoozeInterruptISR();
-void btnMenuInterruptISR();
-void selector_interrupt();
-void volume_interrupt();
-void listAllFiles();
-
-//images
-bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap);
-
-// internet
-int Start_WiFi();
-
-// menus
-String items_main (menu_main m);
-String items_settings (menu_settings m);
-void setButtonDefaultOff();
-void setButtonDefaultOn();
-
-// radio
-void selectRadioMode();
-
-// tft
-void displayWelcomeScreen();
-void waitWelcomeScreen();
-void paintTimeModeScreen();
-void paintWeatherModeScreen();
-void paintRadioScreen();
-void topBar(topbar t = basic);
-void resetTFTlight();
-void lowerTftLED();
-
-//time
-void getInternetTime();
-
-// /********** Event handles **************/
-// static uint8_t timeScreenHandle;      // 1
-// static uint8_t weatherScreenHandle;   // 2
-// static uint8_t radioScreenHandle;     // 3
-// static uint8_t topbarHandle;          // 4
-// static uint8_t weatherUpdateHandle;   // 5
-// static uint8_t alarm1Handle;          // 6
-// static uint8_t alarm2Handle;          // 7
-// static uint8_t alarm3Handle;          // 8
-// static uint8_t alarm1SnoozeHandle;    // 9
-// static uint8_t alarm2SnoozeHandle;    // 10
-// static uint8_t alarm3SnoozeHandle;    // 11
-// // 12
-// // 13
-// // 14
-// static uint8_t nowEvent;              // 15
 
 /********** Global variables **************/
 /* MOVE TO SETTINGS FILE WHEN READY *******/

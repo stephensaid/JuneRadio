@@ -7,14 +7,9 @@
 #include <ezTime.h>
 #include <OpenWeather.h>
 
-// uint8_t weatherUpdateHandle;
-
-OpenWeatherMapCurrent client;         // initiate the client
-WiFiClient wifiClient;                // Initiate WiFi client
-
-class weather {
-  public:
-    void getCurrentWeather();
-};
+  // class weather {
+  //   public:
+  //     void getCurrentWeather();
+  // };
 
 #endif // weather_h
