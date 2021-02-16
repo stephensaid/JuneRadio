@@ -1,6 +1,19 @@
 #ifndef defaults_h
 #define defaults_h
 
+#include <Arduino.h>
+
+// Color definitions
+#define TFT_BLACK       0x0000      /*   0,   0,   0 */
+#define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
+#define TFT_GREEN       0x07E0      /*   0, 255,   0 */
+#define TFT_MAGENTA     0xF81F      /* 255,   0, 255 */
+#define TFT_ORANGE      0xFDA0      /* 255, 180,   0 */
+#define TFT_RED         0xF800      /* 255,   0,   0 */
+#define TFT_CYAN        0x07FF      /*   0, 255, 255 */
+#define TFT_YELLOW      0xFFE0      /* 255, 255,   0 */
+#define TFT_BLUE        0x001F      /*   0,   0, 255 */
+
 // Pin definitions
 #define SELECTOR_A_PIN      17
 #define SELECTOR_B_PIN       4
@@ -55,13 +68,6 @@ const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 min
 const String menu_main_name       	 = "Main Menu" ;
 const String menu_settings_name   	 = "Settings"  ;
 
-// DarkSky Weather User configuration
-// String api_key 		 = "01d65d9657ba6415b710acc9c7a0fd54";
-// String latitude 	 = "35.8987477"; // 90.0000 to -90.0000 negative for Southern hemisphere
-// String longitude 	 = "14.4730606"; // 180.000 to -180.000 negative for West
-// String units 		   = "si";
-// String language 	 = "en";
-
 // OpenWeather User configuration
 static String OPEN_WEATHER_MAP_APP_ID = "e4c90fd05cb42bca67ce2a2d34020544";
 /*
@@ -84,19 +90,18 @@ static String OPEN_WEATHER_MAP_LANGUAGE = "en";
 static boolean IS_METRIC = true;
 
 
-
 /********** Event handles **************/
-// static uint8_t timeScreenHandle;      // 1
-// static uint8_t weatherScreenHandle;   // 2
-// static uint8_t radioScreenHandle;     // 3
-// static uint8_t topbarHandle;          // 4
+static uint8_t timeScreenHandle;      // 1
+static uint8_t weatherScreenHandle;   // 2
+static uint8_t radioScreenHandle;     // 3
+static uint8_t topbarHandle;          // 4
 static uint8_t weatherUpdateHandle;   // 5
-// static uint8_t alarm1Handle;          // 6
-// static uint8_t alarm2Handle;          // 7
-// static uint8_t alarm3Handle;          // 8
-// static uint8_t alarm1SnoozeHandle;    // 9
-// static uint8_t alarm2SnoozeHandle;    // 10
-// static uint8_t alarm3SnoozeHandle;    // 11
+static uint8_t alarm1Handle;          // 6
+static uint8_t alarm2Handle;          // 7
+static uint8_t alarm3Handle;          // 8
+static uint8_t alarm1SnoozeHandle;    // 9
+static uint8_t alarm2SnoozeHandle;    // 10
+static uint8_t alarm3SnoozeHandle;    // 11
 // // 12
 // // 13
 // // 14

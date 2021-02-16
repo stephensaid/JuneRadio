@@ -4,17 +4,7 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
-
-// Color definitions
-#define TFT_BLACK       0x0000      /*   0,   0,   0 */
-#define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
-#define TFT_GREEN       0x07E0      /*   0, 255,   0 */
-#define TFT_MAGENTA     0xF81F      /* 255,   0, 255 */
-#define TFT_ORANGE      0xFDA0      /* 255, 180,   0 */
-#define TFT_RED         0xF800      /* 255,   0,   0 */
-#define TFT_CYAN        0x07FF      /*   0, 255, 255 */
-#define TFT_YELLOW      0xFFE0      /* 255, 255,   0 */
-#define TFT_BLUE        0x001F      /*   0,   0, 255 */
+#include <defaults.h>
 
 #define _conFilename "/config.txt"
 
