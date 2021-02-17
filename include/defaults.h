@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 
+// ***************************************************************************
+// TFT Settings
+// ***************************************************************************
 // Color definitions
 #define TFT_BLACK       0x0000      /*   0,   0,   0 */
 #define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
@@ -14,7 +17,31 @@
 #define TFT_YELLOW      0xFFE0      /* 255, 255,   0 */
 #define TFT_BLUE        0x001F      /*   0,   0, 255 */
 
-// Pin definitions
+// #define USER_SETUP_LOADED
+// #define ILI9341_DRIVER
+
+// //Pin definitions
+// #define TFT_MISO 			      19	 // TFT PIN 9
+// #define TFT_MOSI 			      23	 // TFT PIN 6
+// #define TFT_SCLK 			      18	 // TFT PIN 7
+// #define TFT_CS   			      15	 // TFT PIN 3
+// #define TFT_DC   			       2   // TFT PIN 5
+// #define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
+#define TFT_LED  			       3	 // TFT PIN 8
+
+#define f012m   "fonts/Roboto-Med-012"
+#define f009r   "fonts/Roboto-Reg-009"
+#define f012r   "fonts/Roboto-Reg-012"
+#define f015r   "fonts/Roboto-Reg-015"
+#define f018r   "fonts/Roboto-Reg-018"
+#define f024r   "fonts/Roboto-Reg-024"
+#define f036r   "fonts/Roboto-Reg-036"
+#define fM048m  "fonts/RobotoM-Med-48" 	 // numbers only
+#define fM090m  "fonts/RobotoM-Med-90"		 // numbers only
+
+// ***************************************************************************
+// Encoder and button Pin settings
+// ***************************************************************************
 #define SELECTOR_A_PIN      17
 #define SELECTOR_B_PIN       4
 #define SELECTOR_BTN_PIN    13		// PIN 22 does not seem to be working properly
@@ -23,33 +50,17 @@
 #define VOLUME_B_PIN        39
 #define VOLUME_BTN_PIN      34
 
-#define TFT_MISO 			      19	 // TFT PIN 9
-#define TFT_MOSI 			      23	 // TFT PIN 6
-#define TFT_SCLK 			      18	 // TFT PIN 7
-#define TFT_CS   			      15	 // TFT PIN 3
-#define TFT_DC   			       2   // TFT PIN 5
-#define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
-#define TFT_LED  			       3	 // TFT PIN 8
-
 #define MODE_PIN   			    21
 #define STANDBY_PIN  		    33
 #define SNOOZE_PIN			    16
 #define MENU_PIN			       5
 
+// ***************************************************************************
+// Other settings
+// ***************************************************************************
 
 #define FS_NO_GLOBALS
-#define f012m "fonts/Roboto-Med-012"
-#define f009r "fonts/Roboto-Reg-009"
-#define f012r "fonts/Roboto-Reg-012"
-#define f015r "fonts/Roboto-Reg-015"
-#define f018r "fonts/Roboto-Reg-018"
-#define f024r "fonts/Roboto-Reg-024"
-#define f036r "fonts/Roboto-Reg-036"
-#define fM048m "fonts/RobotoM-Med-48" 		// numbers only
-#define fM090m "fonts/RobotoM-Med-90"		// numbers only
-
 #define DEG2RAD 0.0174532925
-
 #define volume_lower_bound 	 0
 #define volume_upper_bound 	10
 
@@ -68,15 +79,16 @@ const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 min
 const String menu_main_name       	 = "Main Menu" ;
 const String menu_settings_name   	 = "Settings"  ;
 
+
+// ***************************************************************************
 // OpenWeather User configuration
-static String OPEN_WEATHER_MAP_APP_ID = "e4c90fd05cb42bca67ce2a2d34020544";
-/*
-Go to https://openweathermap.org/find?q= and search for a location. Go through the
-result set and select the entry closest to the actual location you want to display
-data for. It'll be a URL like https://openweathermap.org/city/2657896. The number
-at the end is what you assign to the constant below.
- */
-static String OPEN_WEATHER_MAP_LOCATION_ID = "2563191";
+/* Go to https://openweathermap.org/find?q= and search for a location. Go through the
+   result set and select the entry closest to the actual location you want to display
+   data for. It'll be a URL like https://openweathermap.org/city/2657896. The number
+   at the end is what you assign to the constant below.
+// ***************************************************************************/
+static String OPEN_WEATHER_MAP_APP_ID       = "e4c90fd05cb42bca67ce2a2d34020544";
+static String OPEN_WEATHER_MAP_LOCATION_ID  = "2563191";
 /*
 Arabic - ar, Bulgarian - bg, Catalan - ca, Czech - cz, German - de, Greek - el,
 English - en, Persian (Farsi) - fa, Finnish - fi, French - fr, Galician - gl,
@@ -86,11 +98,12 @@ Portuguese - pt, Romanian - ro, Russian - ru, Swedish - se, Slovak - sk,
 Slovenian - sl, Spanish - es, Turkish - tr, Ukrainian - ua, Vietnamese - vi,
 Chinese Simplified - zh_cn, Chinese Traditional - zh_tw.
 */
-static String OPEN_WEATHER_MAP_LANGUAGE = "en";
-static boolean IS_METRIC = true;
+static String OPEN_WEATHER_MAP_LANGUAGE   = "en";
+static boolean IS_METRIC                  = true;
 
-
-/********** Event handles **************/
+// ***************************************************************************/
+// Event handles
+// ***************************************************************************/
 static uint8_t timeScreenHandle;      // 1
 static uint8_t weatherScreenHandle;   // 2
 static uint8_t radioScreenHandle;     // 3
