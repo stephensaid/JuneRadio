@@ -19,6 +19,7 @@
 #include <EasyButton.h>
 #include <ESPRotary.h>
 
+extern void setButtonDefaultOff();
 
 /********* INITIALIZATION CODE *********/
 // Encoders setup
@@ -38,70 +39,6 @@ TFT_eSprite spr = TFT_eSprite(&tft);  // Sprite class needs to be invoked
 
 Timezone myTZ;                        // ezTime instance
 rjConfig con;                         // Initiate config file
-
-/********* ENUMERATIONS ****************/
-// last is not a mode... it only serves as an end to the list
-// Will set mode to first in list when the end of the list is reached
-enum radioModeEnum {
-  internetRadio,
-  dabRadio,
-  fmRadio,
-  // MP3,
-  savedStations,
-  last = savedStations
-} radioMode;          // enumaration for modes
-
-enum menus {
-  ms_main,
-  ms_settings,
-  ms_alarms
-};
-
-enum menu_main {
-  m_stations = 1,
-  m_alarm,                            // alarm
-  m_settings,                         // Settings
-  m_main_LAST = m_settings            // last entry in the list
-};
-
-enum menu_settings {
-  m_wifi = 1,                         // Wi-Fi
-  m_themes,                           // Themes
-  m_timeFormat,                       // Time Format
-  m_screenTimeout,                    // TFT Backlight Screen Timeout
-  m_weatherTimeout,                   // Weather Screen Timeout
-  m_settings_LAST = m_weatherTimeout  // last entry in the list
-};
-
-enum menu_alarms {
-  m_alarm1 = 1,
-  m_alarm2,
-  m_alarm3,
-  m_alarm_LAST = m_alarm3
-};
-
-// /********* PROTOTYPES ******************/
-// //buttons
-// void btnMenuPressed();
-// void btnStandbyPressed();
-// void btnSnoozePressed();
-// void btnModePressed();
-//
-// //encoder_routines
-void btnSelectorPressed();
-void btnVolumePressed();
-void selectorChanged(ESPRotary& r);
-void volumeChanged(ESPRotary& r);
-//
-// // menus
-// String items_main (menu_main m);
-// String items_settings (menu_settings m);
-// void setButtonDefaultOff();
-// void setButtonDefaultOn();
-//
-// // radio
-// void selectRadioMode();
-
 
 void setup() {
   Serial.begin(115200);             // Serial monitor setup
@@ -196,7 +133,6 @@ void setup() {
   void setInterval(uint16_t hour = 1);  // update internet time every 1 hour
   getCurrentWeather();
 
-  // volume.setLimitsHandler(volume_lower_bound, volume_upper_bound);
   volume.resetPosition();
 
   attachInterrupt(SELECTOR_A_PIN, selector_interrupt, CHANGE);
@@ -212,7 +148,7 @@ void setup() {
   btnSelector.begin();
   btnVolume.begin();
 
-  // setButtonDefaultOff();
+  setButtonDefaultOff();
 
   btnMode.enableInterrupt(btnModeInterruptISR);
   btnStandby.enableInterrupt(btnStandbyInterruptISR);
@@ -221,7 +157,7 @@ void setup() {
   btnSelector.enableInterrupt(btnSelectorInterruptISR);
   btnVolume.enableInterrupt(btnVolumeInterruptISR);
 
-  // resetAlarms();
+  resetAlarms();
 
   waitWelcomeScreen();
 
@@ -231,5 +167,5 @@ void setup() {
 }
 
 void loop() {
-  //events();
+  events();
 }

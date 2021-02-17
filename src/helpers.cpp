@@ -11,6 +11,10 @@ extern EasyButton btnMenu;
 extern ESPRotary selector;
 extern ESPRotary volume;
 extern Timezone myTZ;
+extern bool isOn;
+
+extern void setButtonDefaultOff();
+extern void setButtonDefaultOn();
 
 /*******************************************************/
 // Purpose   : Draws knob for menus
@@ -229,22 +233,22 @@ void setOffAlarm() {
   resetAlarms();
 }
 
-// void stopAlarm() {
-//   Serial.println("stopAlarm");
-//
-//   // stop alarm here
-//   isOn ? setButtonDefaultOn() : setButtonDefaultOff();
-// }
+void stopAlarm() {
+  Serial.println("stopAlarm");
 
-// void snoozeAlarm() {
-//   Serial.println("Alarm snoozed");
-//
-//   // stop alarm here
-//
-//   time_t snooze = now() + 10 * 60;
-//   setEvent(setOffAlarm, snooze);
-//   isOn ? setButtonDefaultOn() : setButtonDefaultOff();
-// }
+  // stop alarm here
+  isOn ? setButtonDefaultOn() : setButtonDefaultOff();
+}
+
+void snoozeAlarm() {
+  Serial.println("Alarm snoozed");
+
+  // stop alarm here
+
+  time_t snooze = now() + 10 * 60;
+  setEvent(setOffAlarm, snooze);
+  isOn ? setButtonDefaultOn() : setButtonDefaultOff();
+}
 
 /*******************************************************/
 // Purpose   : button and encoders interrupts
@@ -427,4 +431,14 @@ void getInternetTime() {
     myTZ.setPosix(LOCALTZ_POSIX);
     myTZ.setTime(compileTime());
   }
+}
+
+/*************************************************************/
+// Purpose   :  Volume on left or right rotation
+// Paramters :  None
+// Returns   :  None
+// Reference : https://github.com/LennartHennigs/ESPRotary/blob/master/examples/RangedCounter/RangedCounter.ino
+/*************************************************************/
+void showDirection(ESPRotary& volume) {
+  Serial.println(volume.directionToString(volume.getDirection()));
 }

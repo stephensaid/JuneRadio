@@ -118,6 +118,6 @@ static uint8_t alarm3SnoozeHandle;    // 11
 // // 12
 // // 13
 // // 14
-// static uint8_t nowEvent;              // 15
+static uint8_t nowEvent;              // 15
 
 #endif // defaults_h
