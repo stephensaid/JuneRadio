@@ -182,7 +182,7 @@ void setup() {
   // ezEvents debug mode - uncomment the following line
   setDebug(DEBUG);
 
-  //  tft.begin(0x9341);                    // TFT Display
+  // tft.begin(0x9341);                    // TFT Display
   tft.init();
   tft.setRotation(1);                   // Set TFT orientation
   tft.setSwapBytes(true);               // We need to swap the colour bytes (endianess)
@@ -220,14 +220,14 @@ void setup() {
   btnMenu.enableInterrupt(btnMenuInterruptISR);
   btnSelector.enableInterrupt(btnSelectorInterruptISR);
   btnVolume.enableInterrupt(btnVolumeInterruptISR);
-  //
+
   // resetAlarms();
-  //
-  // waitWelcomeScreen();
-  //
-  // paintTimeModeScreen();
-  //
-  // Serial.println(F("setup(): ready"));
+
+  waitWelcomeScreen();
+
+  paintTimeModeScreen();
+
+  Serial.println(F("setup(): ready"));
 }
 
 void loop() {
