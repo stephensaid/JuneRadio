@@ -121,7 +121,7 @@ void setup() {
 
   // tft.begin(0x9341);                    // TFT Display
   tft.init();
-  tft.setRotation(1);                   // Set TFT orientation
+  tft.setRotation(3);                   // Set TFT orientation
   tft.setSwapBytes(true);               // We need to swap the colour bytes (endianess)
   //4.setColorDepth(16);                // 16 bit colour needed to show antialiased fonts
   TJpgDec.setCallback(tft_output);      // The decoder must be given the exact name of the rendering function above
