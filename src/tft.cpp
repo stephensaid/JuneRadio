@@ -98,6 +98,10 @@ void paintTimeModeScreen() {
     tft.unloadFont();
   }
 
+  TJpgDec.drawFsJpg( 10, 160, "/icons/wifi_off_black.jpg");
+  TJpgDec.drawFsJpg( 28, 160, "/icons/wifi_white.jpg");
+  TJpgDec.drawFsJpg( 10, 190, "/icons/temp-blk.jpg");
+
   ///  WEATHER  ///////////////////////////////////////////////////
   // check if we have weather data
   // If we do not have it or it is stale, display message
@@ -357,14 +361,13 @@ void topBar(topbar t) {
     xpos -= 10;
   }
 
-  int icons_xpos = xpos;
-
   if (t == basic || t == full)
     spr.drawString(myTZ.dateTime("j F Y"), 10, 5);
 
   spr.unloadFont();
   spr.pushSprite(0, 0);
 
+  int icons_xpos = xpos;
   icons_xpos -= 16;
   ypos = 4;
   String wifi_icon;
