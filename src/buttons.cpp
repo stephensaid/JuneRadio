@@ -1,6 +1,6 @@
 #include "buttons.h"
 
-extern bool isOn;
+extern bool alarmIsOn;
 extern EasyButton btnSnooze;
 
 extern void invokeMainMenu();
@@ -22,7 +22,7 @@ void btnStandbyTurnOn() {
 
 void turnOn() {
   resetTFTlight();
-  isOn = true;
+  alarmIsOn = true;
   setButtonDefaultOn();
 
   Serial.println("btnStandbyTurnOn()::Need to set to radio mode here");
@@ -38,7 +38,7 @@ void btnStandbyTurnOff() {
 }
 
 void turnOff() {
-  isOn = false;
+  alarmIsOn = false;
   setButtonDefaultOff();
   lowerTftLED();
   tft.fillScreen(con.element.BG_COLOUR);
@@ -86,7 +86,7 @@ void btnWeatherPressed() {
   nowEvent = setEvent(paintWeatherModeScreen, now(), LOCAL_TIME);
 
   deleteEvents();
-  if (isOn) {
+  if (alarmIsOn) {
     timeScreenHandle = setEvent(paintTimeModeScreen, now() + weatherScreenTimeout); // return to time screen after this time period
   } else {
     radioScreenHandle = setEvent(paintRadioScreen, now() + weatherScreenTimeout); // this needs to be every half a second to update time on screen

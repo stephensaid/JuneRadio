@@ -171,7 +171,7 @@ void menu( int d, boolean click, menus m) {
       tft.unloadFont();
   }
 
-  //  grid(10);
+  if (DevMode) { grid(10); };
 }
 
 /*******************************************************/

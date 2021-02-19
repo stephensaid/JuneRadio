@@ -11,7 +11,7 @@ extern EasyButton btnMenu;
 extern ESPRotary selector;
 extern ESPRotary volume;
 extern Timezone myTZ;
-extern bool isOn;
+extern bool alarmIsOn;
 
 extern void setButtonDefaultOff();
 extern void setButtonDefaultOn();
@@ -148,7 +148,8 @@ void grid (int gridspacing) {
       tft.drawNumber(i, i, VScreenMax + 1, 1);
       c = 0;
     } else {
-      tft.drawLine(i, 0, i, VScreenMax - 1, con.element.FG_COLOUR);
+      // tft.drawLine(i, 0, i, VScreenMax - 1, con.element.FG_COLOUR);
+      tft.drawLine(i, 0, i, VScreenMax - 1, TFT_CYAN);
     }
     c += gridspacing;
   } // End if
@@ -160,7 +161,8 @@ void grid (int gridspacing) {
       tft.drawNumber(i, HScreenMax - 20, i, 1);
       c = 0;
     } else {
-      tft.drawLine(0, i, HScreenMax - 1, i, con.element.FG_COLOUR);
+      // tft.drawLine(0, i, HScreenMax - 1, i, con.element.FG_COLOUR);
+      tft.drawLine(0, i, HScreenMax - 1, i, TFT_CYAN);
     }
     c += gridspacing;
   } // End if
@@ -224,7 +226,7 @@ void resetAlarms() {
 }
 
 void setOffAlarm() {
-  Serial.println("Alarm set off");
+  Serial.println("setOffAlarm(): Alarm set off.");
 
   // set off alarm here
 
@@ -234,10 +236,10 @@ void setOffAlarm() {
 }
 
 void stopAlarm() {
-  Serial.println("stopAlarm");
+  Serial.println("stopAlarm() Alarm stopped.");
 
   // stop alarm here
-  isOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  alarmIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
 }
 
 void snoozeAlarm() {
@@ -247,7 +249,7 @@ void snoozeAlarm() {
 
   time_t snooze = now() + 10 * 60;
   setEvent(setOffAlarm, snooze);
-  isOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  alarmIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
 }
 
 /*******************************************************/
@@ -372,7 +374,7 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) 
 
 /*************************************************************/
 // Purpose   :  Routine to connect to Wifi
-//              Will attempt 20 times to connect to wifi
+//              Will attempt 5 times to connect to wifi
 // Paramters :  None
 // Returns   :  -5 if it fails and 1 if successful
 // Reference : https://www.arduino.cc/en/Reference/WiFiStatus
@@ -397,10 +399,11 @@ int Start_WiFi() {
   WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
   while ( WiFi.status() != WL_CONNECTED ) {
     unsigned long t = millis();
-    while (millis() < t + 500) {  }
+    while (millis() < t + 700) {  }
     Serial.print(".");
-    if (connAttempts > 20) {
+    if (connAttempts > 5) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
+      getInternetTime();
       return -5;
     }
     connAttempts++;
@@ -427,7 +430,7 @@ void getInternetTime() {
     Serial.println(myTZ.dateTime());
     myTZ.setDefault();
   } else {
-    Serial.print("getInternetTime::Set time using compileTime.");
+    Serial.println("getInternetTime::Set time using compileTime.");
     myTZ.setPosix(LOCALTZ_POSIX);
     myTZ.setTime(compileTime());
   }
