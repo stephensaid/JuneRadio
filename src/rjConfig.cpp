@@ -50,7 +50,7 @@ void rjConfig::loadConfiguration(const char *filename, Config &config) {
   config.WEATHER_TIMEOUT  = doc["WEATHER_TIMEOUT"] | 300;
   config.SCREEN_TIMEOUT   = doc["SCREEN_TIMEOUT"] | 10;
   config.TIME_FORMAT      = doc["TIME_FORMAT"] | 1;                 // 1= 12 hour clock; 2 = 24 hour clock
-  config.BG_COLOUR        = doc["BG_COLOUR"] | TFT_BLACK;
+  config.BG_COLOUR        = doc["BG_COLOUR"] | TFT_DKGRAY;
   config.FG_COLOUR        = doc["FG_COLOUR"] | TFT_WHITE;
   config.HIGHLIGHT_COLOUR = doc["HIGHLIGHT_COLOUR"] | TFT_GREEN;
   config.ALARM_1_HOUR     = doc["ALARM_1_HOUR"] | 25;
@@ -134,7 +134,7 @@ void rjConfig::resetConfiguration(const char *filename, Config &config) {
   config.WEATHER_TIMEOUT  = 5 * 60;
   config.SCREEN_TIMEOUT   = 10;
   config.TIME_FORMAT      = 1;                //  1= 12 hour clock; 2 = 24 hour clock
-  config.BG_COLOUR        = TFT_BLACK;
+  config.BG_COLOUR        = TFT_DKGRAY;
   config.FG_COLOUR        = TFT_WHITE;
   config.HIGHLIGHT_COLOUR = TFT_GREEN;
   config.ALARM_1_HOUR     = 25;

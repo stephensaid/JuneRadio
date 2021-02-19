@@ -1,3 +1,3 @@
 #include "defaults.h"
 
-bool isOn                       = false;    // Alarm is sounding
+bool alarmIsOn                       = false;    // Alarm is sounding

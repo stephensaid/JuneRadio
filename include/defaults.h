@@ -3,11 +3,14 @@
 
 #include <Arduino.h>
 
+#define DevMode 0
+
 // ***************************************************************************
 // TFT Settings
 // ***************************************************************************
 // Color definitions
 #define TFT_BLACK       0x0000      /*   0,   0,   0 */
+#define TFT_DKGRAY      0x31A6
 #define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
 #define TFT_GREEN       0x07E0      /*   0, 255,   0 */
 #define TFT_MAGENTA     0xF81F      /* 255,   0, 255 */
@@ -71,7 +74,7 @@
 const int ledFreq 					         = 5000;
 const int ledChannel 				         = 0;
 const int ledResolution 			       = 8;
-const int tftDelay 					         = 10 * 60;   // 10 seconds // TFT delay before turning down brightness
+const int tftDelay 					         = 1 * 60;   // 10 seconds // TFT delay before turning down brightness
 const int tftSleepBrightness 		     = 30 * 60;   // TFT brightness after delay
 const int weatherScreenTimeout  	   =  5 * 60;   // weather screen will return to time screen after this number of minutes
 const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
