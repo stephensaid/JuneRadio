@@ -10,7 +10,7 @@
 // ***************************************************************************
 // Color definitions
 #define TFT_BLACK       0x0000      /*   0,   0,   0 */
-#define TFT_DKGRAY      0x31A6
+#define TFT_DKGRAY      0x31A6      /*  54,  54,  54 */
 #define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
 #define TFT_GREEN       0x07E0      /*   0, 255,   0 */
 #define TFT_MAGENTA     0xF81F      /* 255,   0, 255 */
@@ -30,7 +30,7 @@
 // #define TFT_CS   			      15	 // TFT PIN 3
 // #define TFT_DC   			       2   // TFT PIN 5
 // #define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
-#define TFT_LED  			       3	 // TFT PIN 8
+#define TFT_LED  			       22 //3	 // TFT PIN 8
 
 #define f012m   "fonts/Roboto-Med-012"
 #define f009r   "fonts/Roboto-Reg-009"
@@ -74,7 +74,7 @@
 const int ledFreq 					         = 5000;
 const int ledChannel 				         = 0;
 const int ledResolution 			       = 8;
-const int tftDelay 					         = 1 * 60;   // 10 seconds // TFT delay before turning down brightness
+const int tftDelay 					         = 10;        // 10 seconds // TFT delay before turning down brightness
 const int tftSleepBrightness 		     = 30 * 60;   // TFT brightness after delay
 const int weatherScreenTimeout  	   =  5 * 60;   // weather screen will return to time screen after this number of minutes
 const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
