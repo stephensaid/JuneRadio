@@ -10,12 +10,11 @@ unsigned long timeWelcomeScreen;
 // Returns   : None
 /*******************************************************/
 void displayWelcomeScreen() {
-  Serial.println("Displaying June One logo welcome screen...");
+  Serial.println("\ndisplayWelcomeScreen():: Displaying June One logo welcome screen...");
   resetTFTlight();
   TJpgDec.drawFsJpg(0, 0, "/juneradio.jpg"); // display welcome logo
   timeWelcomeScreen = millis();
 }
-
 
 /*******************************************************/
 // Purpose   : Waiting time for welcome screen while
@@ -25,10 +24,9 @@ void displayWelcomeScreen() {
 /*******************************************************/
 void waitWelcomeScreen() {
   while ( millis() < timeWelcomeScreen + 5000 ) yield();
-  Serial.println("Welcome screen ready");
+  Serial.println("\nwaitWelcomeScreen():: Welcome screen ready");
   tft.fillScreen(con.element.BG_COLOUR);
 }
-
 
 /***************************************************************/
 // Purpose   : Refreshes Time Mode Screen - updates time, etc
@@ -36,10 +34,10 @@ void waitWelcomeScreen() {
 // Returns   : None
 /***************************************************************/
 void paintTimeModeScreen() {
+  Serial.println("\npaintTimeModeScreen():: Displaying clock...");
+
   deleteEvents();
   timeScreenHandle = setEvent(paintTimeModeScreen, now() + 30); // update time screen every half a second
-
-  Serial.println("paintTimeModeScreen():: Displaying clock...");
 
   topBar(mini);
   static String prevDate, prevAP, prevMin, prevHour, prevTemp;
@@ -98,15 +96,18 @@ void paintTimeModeScreen() {
     tft.unloadFont();
   }
 
-  TJpgDec.drawFsJpg( 10, 160, "/icons/wifi_off_black.jpg");
-  TJpgDec.drawFsJpg( 28, 160, "/icons/wifi_white.jpg");
-  TJpgDec.drawFsJpg( 10, 190, "/icons/temp-blk.jpg");
-
   ///  WEATHER  ///////////////////////////////////////////////////
   // check if we have weather data
   // If we do not have it or it is stale, display message
 
-  if (weatherData.observationTime > ( now() - (60 * 60) ) ) {
+  time_t weatherTime = weatherData.observationTime;
+  time_t nowTime = UTC.now() - (60 * 60);
+
+  // Serial.printf("observationTime: %d, full date: %s", weatherData.observationTime, ctime(&weatherTime));
+  // Serial.print("nowTime:");  Serial.println(nowTime);
+  // Serial.printf("nowTime        :     full date: %s", ctime(&nowTime) );
+
+  if (weatherTime > nowTime ) {
 
     con.element.BG_COLOUR == TFT_DKGRAY ? bg = "blk" : bg = "wht";
     curTemp = String(weatherData.temp);
@@ -118,7 +119,7 @@ void paintTimeModeScreen() {
       tft.loadFont(f018r);
       tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
       tft.fillRect( 10, 140, 200, 38, con.element.BG_COLOUR);                               // WEATHER HEADINGS
-      tft.drawString(weatherData.description, 15, 155);                                            // WEATHER HEADINGS
+      tft.drawString(weatherData.description, 15, 155);                                            // WEATHER HEADINGS ex. scattered clouds
       //    tft.drawString("Wind", 110, 155);                                               // WIND HEADING
       tft.unloadFont();
 
@@ -148,24 +149,19 @@ void paintTimeModeScreen() {
       prevTemp = curTemp;
     }
 
-    curWindSpeed = weatherData.windSpeed;
+    curWindSpeed = weatherData.windSpeed * 3.6;
 
     if ( prevWindSpeed != curWindSpeed ) {
-      whole = String((int)(weatherData.windSpeed));
+      whole = String((int)curWindSpeed);
       tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
 
-      (curWindSpeed >= 10) ? decimal = "" : decimal = String(getDecimal(weatherData.windSpeed, 1));
+      (curWindSpeed >= 10) ? decimal = "" : decimal = String(getDecimal(curWindSpeed, 1));
       tft.fillRect(100, 178, 110, 48, con.element.BG_COLOUR);                               //WIND
-
 
       tft.loadFont(f036r);
       xpos = 110; ypos = 190;
       tft.drawString(whole, xpos, ypos);                                          // WIND SPEED
       stringWidth = tft.textWidth(whole);
-      tft.unloadFont();
-
-      tft.loadFont(f024r);
-      tft.drawString(degToCompass(weatherData.windDeg), xpos + stringWidth + 8, 180);  // WIND DIRECTION TEXT
       tft.unloadFont();
 
       ypos = 204;
@@ -182,11 +178,32 @@ void paintTimeModeScreen() {
       tft.drawString("km/h", xpos, ypos + 1);                                 // KM/H
       tft.unloadFont();
 
-      xpos = 170; ypos = 160;
-      drawArrow(xpos, ypos, 20, 13, (int32_t)weatherData.windDeg, con.element.FG_COLOUR);
-
       prevWindSpeed = curWindSpeed;
     }
+
+    xpos = 134;
+    tft.loadFont(f024r);
+    String windDirection = degToCompass(weatherData.windDeg);
+    Serial.printf("Wind direction: %s which is %d wide.", windDirection.c_str(), tft.textWidth(windDirection));
+    tft.drawString(windDirection, xpos, 180);  // WIND DIRECTION TEXT
+    tft.unloadFont();
+
+    xpos += tft.textWidth(windDirection) + 28 ;
+    ypos = 187;
+
+    // delay(3000);
+    //
+    // for (int d = 0; d < 360; d++ ) {
+    //   drawArrow(xpos, ypos, 20, 13, d, con.element.FG_COLOUR);
+    //   delay (10);
+    //   tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
+    // }
+    //
+    // delay(3000);
+
+    tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
+    drawArrow(xpos, ypos, 20, 13, (int32_t)weatherData.windDeg, con.element.FG_COLOUR);
+
   } else {
     tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
     tft.loadFont(f015r);
@@ -343,6 +360,8 @@ void topBar(topbar t) {
   int xpos = 320 - 10,
       ypos = 5;
   String curTime = "";
+
+  // if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
 
   spr.createSprite(320, 20);
   spr.fillSprite(con.element.BG_COLOUR);

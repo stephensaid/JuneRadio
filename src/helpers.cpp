@@ -374,36 +374,30 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) 
 
 /*************************************************************/
 // Purpose   :  Routine to connect to Wifi
-//              Will attempt 5 times to connect to wifi
+//              Will attempt 10 times to connect to wifi
 // Paramters :  None
 // Returns   :  -5 if it fails and 1 if successful
 // Reference : https://www.arduino.cc/en/Reference/WiFiStatus
 /*************************************************************/
 int Start_WiFi() {
-  String wifiSSID;
-  String wifiPassword;
-
-  wifiSSID     = con.element.WIFI_SSID;
-  wifiPassword = con.element.WIFI_PASSWORD;
-
-  wifiSSID     = "StephenMiHS";
-  wifiPassword = "abcd1234";
+  String wifiSSID     = con.element.WIFI_SSID;
+  String wifiPassword = con.element.WIFI_PASSWORD;
 
   if ( wifiSSID == "" ) {
     Serial.println("\r\nStart_WiFi::Wi-Fi failed to connect. SSID not set in config file.");
     return -5;
   }
 
-  Serial.printf("\r\nStart_WiFi::Connecting to: %s \n", wifiSSID.c_str() );
+  Serial.printf("\r\nStart_WiFi::Connecting to %s.\n", wifiSSID.c_str() );
   int connAttempts = 0;
-  WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
+
   while ( WiFi.status() != WL_CONNECTED ) {
+    WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
     unsigned long t = millis();
-    while (millis() < t + 700) {  }
+    while (millis() < t + 700) { }
     Serial.print(".");
-    if (connAttempts > 5) {
+    if (connAttempts > 10) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
-      getInternetTime();
       return -5;
     }
     connAttempts++;
@@ -426,11 +420,11 @@ void getInternetTime() {
     waitForSync();
     // myTZ.setLocation("mt");
     myTZ.setPosix(LOCALTZ_POSIX);
-    Serial.print("getInternetTime::Updated internet time: ");
+    Serial.print("\ngetInternetTime()::Updated internet time: ");
     Serial.println(myTZ.dateTime());
     myTZ.setDefault();
   } else {
-    Serial.println("getInternetTime::Set time using compileTime.");
+    Serial.println("\ngetInternetTime()::Set time using compileTime.");
     myTZ.setPosix(LOCALTZ_POSIX);
     myTZ.setTime(compileTime());
   }
