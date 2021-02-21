@@ -167,7 +167,7 @@ void setup() {
 
   paintTimeModeScreen();
 
-  weatherUpdateHandle = setEvent(getCurrentWeather, now() + 1 );
+  setEvent(getCurrentWeather, now() + 1 );
 
   Serial.println(F("setup(): ready"));
 }

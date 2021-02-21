@@ -9,7 +9,6 @@ extern EasyButton btnSnooze;
 extern EasyButton btnMenu;
 extern ESPRotary selector;
 extern ESPRotary volume;
-// extern nowEvent;
 
 extern void paintTopbar();
 extern void btnMenuPressed();
@@ -214,7 +213,7 @@ void menuSelect() {
 void rotMenuBrowse(ESPRotary & r) {
   Serial.print("Direction: "); Serial.println (r.getDirection());
   r.getDirection() == 255 ? dir = -1 : dir = 1;
-  nowEvent = setEvent(menuBrowse, now(), LOCAL_TIME);
+  setEvent(menuBrowse, now(), LOCAL_TIME);
 }
 
 void menuBrowse() {

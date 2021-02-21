@@ -1,3 +1,3 @@
 #include "defaults.h"
 
-bool alarmIsOn                       = false;    // Alarm is sounding
+bool radioIsOn                       = false;    // Radio is on - not in standby mode

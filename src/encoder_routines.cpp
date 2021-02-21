@@ -49,7 +49,7 @@ void btnSelectorPressed() {
 }
 
 void btnMenuSelect() { // selector encoder button pressed when in menu
-  nowEvent = setEvent(menuSelect, now(), LOCAL_TIME);
+  setEvent(menuSelect, now(), LOCAL_TIME);
 }
 
 /*******************************************************/

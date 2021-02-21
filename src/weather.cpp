@@ -13,7 +13,8 @@ OW_daily    *daily          = new OW_daily;
 // Returns   : None - sets arrays with weather data
 /***************************************************************/
 void getCurrentWeather() {
-  weatherUpdateHandle = setEvent(getCurrentWeather, now() + weatherUpdateFrequency );
+  // weatherUpdateHandle = setEvent(getCurrentWeather, now() + weatherUpdateFrequency );
+  setEvent(getCurrentWeather, now() + weatherUpdateFrequency );
   if ( WiFi.status() != WL_CONNECTED ) {
     Serial.println("getCurrentWeather():: Weather update failed because Wi-Fi is not connected!");
     return;

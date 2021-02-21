@@ -16,7 +16,7 @@ void selectRadioMode() {
   if (radioMode == radioModeEnum(last))
     radioMode = radioModeEnum(0);
 
-  Serial.printf("radio mode: %u \n", radioMode);
+  Serial.printf("selectRadioMode():: radio mode: %u\n\n", radioMode);
 
   // set varibales
   switch (radioMode) {
@@ -37,8 +37,6 @@ void selectRadioMode() {
       break;
   }
 
-  // update screen
-  paintRadioScreen();
 
   // set hardware for playing radio mode.
   // ...

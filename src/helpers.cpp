@@ -11,10 +11,14 @@ extern EasyButton btnMenu;
 extern ESPRotary selector;
 extern ESPRotary volume;
 extern Timezone myTZ;
-extern bool alarmIsOn;
+extern bool radioIsOn;
 
 extern void setButtonDefaultOff();
 extern void setButtonDefaultOn();
+extern void paintTimeModeScreen();
+extern void paintWeatherModeScreen();
+extern void paintRadioScreen();
+extern void paintTopbar();
 
 /*******************************************************/
 // Purpose   : Draws knob for menus
@@ -239,7 +243,7 @@ void stopAlarm() {
   Serial.println("stopAlarm() Alarm stopped.");
 
   // stop alarm here
-  alarmIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  radioIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
 }
 
 void snoozeAlarm() {
@@ -249,7 +253,7 @@ void snoozeAlarm() {
 
   time_t snooze = now() + 10 * 60;
   setEvent(setOffAlarm, snooze);
-  alarmIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  radioIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
 }
 
 /*******************************************************/
@@ -311,11 +315,17 @@ void listAllFiles(){
 // Returns   : None
 /*******************************************************/
 void deleteEvents() {
-  Serial.println("Deleting events");
-  deleteEvent(timeScreenHandle);
-  deleteEvent(weatherScreenHandle);
-  deleteEvent(radioScreenHandle);
-  deleteEvent(topbarHandle);
+  Serial.println("\ndeleteEvents():: Deleting events\n");
+  // deleteEvent(timeScreenHandle);
+  // deleteEvent(weatherScreenHandle);
+  // deleteEvent(radioScreenHandle);
+  // deleteEvent(topbarHandle);
+
+  deleteEvent(paintTimeModeScreen);
+  deleteEvent(paintWeatherModeScreen);
+  deleteEvent(paintRadioScreen);
+  deleteEvent(paintTopbar);
+
   delay(30);
 }
 
@@ -394,9 +404,9 @@ int Start_WiFi() {
   while ( WiFi.status() != WL_CONNECTED ) {
     WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
     unsigned long t = millis();
-    while (millis() < t + 700) { }
+    while (millis() < t + 800) { }
     Serial.print(".");
-    if (connAttempts > 10) {
+    if (connAttempts > 4) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
       return -5;
     }
