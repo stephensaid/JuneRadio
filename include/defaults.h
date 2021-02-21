@@ -92,7 +92,7 @@ const String menu_settings_name   	 = "Settings"  ;
    at the end is what you assign to the constant below.
 // ***************************************************************************/
 static String OPEN_WEATHER_MAP_APP_ID       = "e4c90fd05cb42bca67ce2a2d34020544";
-static String OPEN_WEATHER_MAP_LOCATION_ID  = "2563191";
+// static String OPEN_WEATHER_MAP_LOCATION_ID  = "2563191";
 /*
 Arabic - ar, Bulgarian - bg, Catalan - ca, Czech - cz, German - de, Greek - el,
 English - en, Persian (Farsi) - fa, Finnish - fi, French - fr, Galician - gl,
@@ -105,23 +105,27 @@ Chinese Simplified - zh_cn, Chinese Traditional - zh_tw.
 static String OPEN_WEATHER_MAP_LANGUAGE   = "en";
 static boolean IS_METRIC                  = true;
 
+// Set both your longitude and latitude to at least 4 decimal places
+static String OPEN_WEATHER_MAP_LATITUDE =  "35.9423"; // 90.0000 to -90.0000 negative for Southern hemisphere
+static String OPEN_WEATHER_MAP_LONGITUDE = "14.2379"; // 180.000 to -180.000 negative for West
+
 // ***************************************************************************/
 // Event handles
 // ***************************************************************************/
-static uint8_t timeScreenHandle;      // 1
-static uint8_t weatherScreenHandle;   // 2
-static uint8_t radioScreenHandle;     // 3
-static uint8_t topbarHandle;          // 4
-static uint8_t weatherUpdateHandle;   // 5
-static uint8_t alarm1Handle;          // 6
-static uint8_t alarm2Handle;          // 7
-static uint8_t alarm3Handle;          // 8
+static uint8_t timeScreenHandle;      // 1    update time screen (StandbyMode)
+static uint8_t weatherScreenHandle;   // 2    update weather screen
+static uint8_t radioScreenHandle;     // 3    update radio screen
+static uint8_t topbarHandle;          // 4    update topbar
+static uint8_t weatherUpdateHandle;   // 5    Update weather information
+static uint8_t alarm1Handle;          // 6    to set off alarm when due
+static uint8_t alarm2Handle;          // 7    to set off alarm when due
+static uint8_t alarm3Handle;          // 8    to set off alarm when due
 static uint8_t alarm1SnoozeHandle;    // 9
 static uint8_t alarm2SnoozeHandle;    // 10
 static uint8_t alarm3SnoozeHandle;    // 11
 // // 12
 // // 13
 // // 14
-static uint8_t nowEvent;              // 15
+static uint8_t nowEvent;              // 15   run functions immediatly - something about interrupt... to check
 
 #endif // defaults_h

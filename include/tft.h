@@ -9,7 +9,9 @@
 #include <ezTime.h>
 #include <weather.h>
 
-extern OpenWeatherMapCurrentData weatherData;
+extern OW_current *currentWeather;
+// extern OW_hourly *hourly;
+// extern OW_daily  *daily;
 extern rjConfig con;
 extern TFT_eSPI tft;
 extern TFT_eSprite spr;

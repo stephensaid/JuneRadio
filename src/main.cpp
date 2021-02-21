@@ -13,8 +13,8 @@
 #include <TJpg_Decoder.h>           // Include the jpeg decoder library
 #include <FS.h>                     // Include SPIFFS
 #include <SPIFFS.h>
-// #include <JSON_Decoder.h>
-#include <JsonListener.h>
+#include <JSON_Decoder.h>
+// #include <JsonListener.h>
 #include <OpenWeather.h>
 #include <EasyButton.h>
 #include <ESPRotary.h>
@@ -185,26 +185,26 @@ void loop() {
 }
 
 
-void loadFile(const char *name) {
-  tft.fillScreen(con.element.BG_COLOUR);
-  tft.loadFont(f015r);
-
-  // Time recorded for test purposes
-  uint32_t t = millis();
-
-  // Get the width and height in pixels of the jpeg if you wish
-  uint16_t w = 0, h = 0;
-  TJpgDec.getFsJpgSize(&w, &h, name); // Note name preceded with "/"
-
-  TJpgDec.drawFsJpg(0, 0, name);
-
-  // How much time did rendering take
-  t = millis() - t;
-
-  char buf[80];
-  sprintf(buf, "%s %dx%d %u ms", name, w, h, t);
-  tft.drawString(buf, 5, 225);
-  Serial.println(buf);
-  tft.unloadFont();
-  delay(3000);
-}
+// void loadFile(const char *name) {
+//   tft.fillScreen(con.element.BG_COLOUR);
+//   tft.loadFont(f015r);
+//
+//   // Time recorded for test purposes
+//   uint32_t t = millis();
+//
+//   // Get the width and height in pixels of the jpeg if you wish
+//   uint16_t w = 0, h = 0;
+//   TJpgDec.getFsJpgSize(&w, &h, name); // Note name preceded with "/"
+//
+//   TJpgDec.drawFsJpg(0, 0, name);
+//
+//   // How much time did rendering take
+//   t = millis() - t;
+//
+//   char buf[80];
+//   sprintf(buf, "%s %dx%d %u ms", name, w, h, t);
+//   tft.drawString(buf, 5, 225);
+//   Serial.println(buf);
+//   tft.unloadFont();
+//   delay(3000);
+// }
