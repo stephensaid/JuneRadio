@@ -109,24 +109,24 @@ void paintTimeModeScreen() {
   // check if we have weather data
   // If we do not have it or it is stale, display message
 
-  time_t weatherTime = weatherData.observationTime;
+  time_t weatherTime = currentWeather->dt;
   time_t staleWeatherTime = UTC.now() - (60 * 60);
 
   if (weatherTime > staleWeatherTime ) {
-    curTemp = String(weatherData.temp);
-    String windDirection = degToCompass(weatherData.windDeg);
-    curWindSpeed = weatherData.windSpeed * 3.6;
+    curTemp = String(currentWeather->temp);
+    String windDirection = degToCompass(currentWeather->wind_deg);
+    curWindSpeed = currentWeather->wind_speed * 3.6;
 
     // Serial.printf("curTemp: %s; prevTemp: %s; windDirection: %s; prevWindDir: %s; curWindSpeed: %f; prevWindSpeed: %f.\n", curTemp.c_str(), prevTemp.c_str(), windDirection.c_str(), prevWindDir.c_str(), curWindSpeed, prevWindSpeed);
 
     if ( prevTemp != curTemp || prevWindDir != windDirection || prevWindSpeed != curWindSpeed ) {
-      whole = String((int)(weatherData.temp));
-      decimal = String(getDecimal(weatherData.temp, 1));
+      whole = String((int)(currentWeather->temp));
+      decimal = String(getDecimal(currentWeather->temp, 1));
 
       tft.loadFont(f018r);
       tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
       tft.fillRect( 10, 140, 200, 38, con.element.BG_COLOUR);                               // WEATHER HEADINGS
-      tft.drawString(weatherData.description, 15, 155);                                            // WEATHER HEADINGS ex. scattered clouds
+      tft.drawString(currentWeather->description, 15, 155);                                            // WEATHER HEADINGS ex. scattered clouds
       tft.unloadFont();
 
       // icons
@@ -192,7 +192,7 @@ void paintTimeModeScreen() {
 
       ypos = 187;
       tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
-      drawArrow(xpos, ypos, 20, 13, (int32_t)weatherData.windDeg, con.element.FG_COLOUR);
+      drawArrow(xpos, ypos, 20, 13, (int32_t)currentWeather->wind_deg, con.element.FG_COLOUR);
       prevWindSpeed = curWindSpeed;
     }
 
@@ -313,11 +313,11 @@ void paintWeatherModeScreen() {
 
   tft.fillScreen(con.element.BG_COLOUR);
 
-  Serial.println("paintWeatherModeScreen()::Displaying weather screen...");
+  Serial.println("paintWeatherModeScreen():: Displaying weather screen...");
 
   // show last updated timestamp of weather forecast
-  Serial.print("paintWeatherModeScreen()::Last weather forecast updated: ");
-  Serial.println( lastWeatherUpdateDateTime() );
+  Serial.print("paintWeatherModeScreen():: Last weather forecast updated: ");
+  Serial.println( dateTime(currentWeather->dt, "g:i A") );
 
   spr.loadFont(f036r);
   spr.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);

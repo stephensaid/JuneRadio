@@ -5,9 +5,10 @@
 #include <WiFi.h>
 #include <defaults.h>
 #include <ezTime.h>
+#include <JSON_Decoder.h>
 #include <OpenWeather.h>
 
 void getCurrentWeather();
-String lastWeatherUpdateDateTime();
+// String lastWeatherUpdateDateTime();
 
 #endif // weather_h
