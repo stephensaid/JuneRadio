@@ -36,8 +36,9 @@ void waitWelcomeScreen() {
 void paintTimeModeScreen() {
   Serial.println("\npaintTimeModeScreen():: Displaying clock...");
 
-  deleteEvents();
-  timeScreenHandle = setEvent(paintTimeModeScreen, now() + 5); // update time screen every half a second
+  // deleteEvents();
+  // timeScreenHandle = setEvent(paintTimeModeScreen, now() + 5); // update time screen every half a second
+  setEvent(paintTimeModeScreen, now() + 5); // update time screen every half a second
 
   topBar(mini);
   static String prevDate, prevAP, prevMin, prevHour, prevTemp, prevWindDir;
@@ -242,10 +243,10 @@ void paintTimeModeScreen() {
     }
 
     if (cur_next_alarm != prev_next_alarm) {
-      Serial.print("Alarm 1    : "); Serial.println(myTZ.dateTime(alarm1));
-      Serial.print("Alarm 2    : "); Serial.println(myTZ.dateTime(alarm2));
-      Serial.print("Alarm 3    : "); Serial.println(myTZ.dateTime(alarm3));
-      Serial.print("Next alarm : "); Serial.println(myTZ.dateTime(cur_next_alarm));
+      // Serial.print("Alarm 1    : "); Serial.println(myTZ.dateTime(alarm1));
+      // Serial.print("Alarm 2    : "); Serial.println(myTZ.dateTime(alarm2));
+      // Serial.print("Alarm 3    : "); Serial.println(myTZ.dateTime(alarm3));
+      // Serial.print("Next alarm : "); Serial.println(myTZ.dateTime(cur_next_alarm));
 
       tft.fillRect(210, 178, 110, 48, con.element.BG_COLOUR);                     // ALARM BACKGROUND
       tft.loadFont(f018r);                                                        // Alarm Headings
@@ -293,10 +294,17 @@ void paintTimeModeScreen() {
 // Returns   : None
 /*******************************************************/
 void paintWeatherModeScreen() {
-  weatherScreenHandle = setEvent(paintWeatherModeScreen, now() + 30);  // this needs to be every half a second to update time and weather info on screen
+  // weatherScreenHandle = setEvent(paintWeatherModeScreen, now() + 5);  // this needs to be every half a second to update time and weather info on screen
+  setEvent(paintWeatherModeScreen, now() + 5);  // this needs to be every half a second to update time and weather info on screen
+
+  // fill in radio screen details here
+  tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
+  tft.loadFont(f036r);
+  tft.drawString("Weather Screen", 30, 50);
+  tft.unloadFont();
 
   /***********************************************/
-  /* TEMP MEASURE   TO REMOVE   ******************/
+  /* TEMP MEASURE   TO EXIT   ********************/
   return;
   /***********************************************/
 
@@ -327,17 +335,22 @@ void paintWeatherModeScreen() {
 }
 
 /*******************************************************/
-// Purpose   : Displays a welcome screen when power up
-//             for the first time while connecting to
-//             internet, syncing time, etc.
+// Purpose   : Radio screen
 // Paramters : None
 // Returns   : None
 /*******************************************************/
 void paintRadioScreen() {
-  Serial.println("paintRadioScreen :: Updating screen");
-  deleteEvents();
-  radioScreenHandle = setEvent(paintRadioScreen, now() + 30);   // this needs to be every half a second to update time on screen
-  topBar();
+  // deleteEvents();
+  Serial.println("\npaintRadioScreen():: Updating radio screen");
+  // radioScreenHandle = setEvent(paintRadioScreen, now() + 5);   // this needs to be every half a second to update time on screen
+  setEvent(paintRadioScreen, now() + 5);   // this needs to be every half a second to update time on screen
+  topBar(full);
+
+  // fill in radio screen details here
+  tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
+  tft.loadFont(f036r);
+  tft.drawString("Radio Screen", 30, 50);
+  tft.unloadFont();
 }
 
 /*******************************************************/
@@ -353,7 +366,8 @@ void topBar(topbar t) {
       ypos = 5;
   String curTime = "";
 
-  if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
+  // if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
+  // shouldn't put Start_Wifi here as it is called very frequently to update time
 
   spr.createSprite(320, 20);
   spr.fillSprite(con.element.BG_COLOUR);
@@ -397,9 +411,9 @@ void topBar(topbar t) {
 // Returns   : None
 /*******************************************************/
 void paintTopbar() {
-  topBar(full);
-  deleteEvents();
-  topbarHandle = setEvent(paintTopbar, now() + 30); // this needs to be every half a second to update time on screen
+  // deleteEvents();
+  // topbarHandle = setEvent(paintTopbar, now() + 5); // this needs to be every half a second to update time on screen
+  // topBar(full);
 }
 
 /*******************************************************/
@@ -409,9 +423,7 @@ void paintTopbar() {
 // Returns   : None
 /*******************************************************/
 void resetTFTlight() {
-  static uint8_t tftLightHandle;
-  deleteEvent(tftLightHandle);
-  tftLightHandle = setEvent(lowerTftLED, now() + tftDelay );
+  // setEvent(lowerTftLED, now() + tftDelay );
   ledcWrite(ledChannel, 255);
 }
 

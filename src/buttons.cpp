@@ -1,6 +1,6 @@
 #include "buttons.h"
 
-extern bool alarmIsOn;
+extern bool radioIsOn;
 extern EasyButton btnSnooze;
 
 extern void invokeMainMenu();
@@ -8,6 +8,7 @@ extern void setButtonDefaultOff();
 extern void setButtonDefaultOn();
 extern void selectRadioMode();
 extern void exitMainMenu();
+extern void paintTopbar();
 
 
 /*******************************************************/
@@ -17,28 +18,32 @@ extern void exitMainMenu();
 // Returns   : None
 /*******************************************************/
 void btnStandbyTurnOn() {
-  nowEvent = setEvent(turnOn, now(), LOCAL_TIME);
+  setEvent(turnOn, now(), LOCAL_TIME);
 }
 
 void turnOn() {
-  resetTFTlight();
-  alarmIsOn = true;
-  setButtonDefaultOn();
+  deleteEvents(); // stop screen updating as soon as possible
+  radioIsOn = true;
+  resetTFTlight();      // light up TFT
+  setButtonDefaultOn(); // change button behaviour
 
-  Serial.println("btnStandbyTurnOn()::Need to set to radio mode here");
-  Serial.println("btnStandbyTurnOn()::Radio ON");
+  Serial.println("btnStandbyTurnOn():: Need to set to radio mode here");
+  Serial.println("btnStandbyTurnOn():: Radio ON\n");
 
   // wake up ESP 32 and power up MP3 decoder and amplifier
-  tft.fillScreen(con.element.BG_COLOUR);
+  tft.fillScreen(con.element.BG_COLOUR);  // clear TFT
+  // update screen
+  paintRadioScreen();
+
   selectRadioMode();
 }
 
 void btnStandbyTurnOff() {
-  nowEvent = setEvent(turnOff, now(), LOCAL_TIME);
+  setEvent(turnOff, now(), LOCAL_TIME);
 }
 
 void turnOff() {
-  alarmIsOn = false;
+  radioIsOn = false;
   setButtonDefaultOff();
   lowerTftLED();
   tft.fillScreen(con.element.BG_COLOUR);
@@ -46,7 +51,7 @@ void turnOff() {
 
   // Make sure that MP3 decoder and amplifier has their power cut out
 
-  Serial.println("Going to sleep now"); delay(1000);
+  // Serial.println("btnStandbyTurnOff():: Going to sleep now"); delay(1000);
 //  esp_light_sleep_start();  // Go to sleep now
 }
 
@@ -57,11 +62,11 @@ void turnOff() {
 /*******************************************************/
 void btnMenuPressed() {
   Serial.println("btnMenuPressed");
-  nowEvent = setEvent(invokeMainMenu, now(), LOCAL_TIME);
+  setEvent(invokeMainMenu, now(), LOCAL_TIME);
 }
 
 void btnExitMainMenu() {
-  nowEvent = setEvent(exitMainMenu, now(), LOCAL_TIME);
+  setEvent(exitMainMenu, now(), LOCAL_TIME);
 }
 /*******************************************************/
 // Purpose   : Handles routines when Mode button is pressed.
@@ -70,7 +75,7 @@ void btnExitMainMenu() {
 /*******************************************************/
 void btnModePressed() {
   resetTFTlight();
-  nowEvent = setEvent(selectRadioMode, now(), LOCAL_TIME);
+  setEvent(selectRadioMode, now(), LOCAL_TIME);
 }
 
 /*******************************************************/
@@ -83,18 +88,18 @@ void btnWeatherPressed() {
   resetTFTlight();
   btnSnooze.onPressed(btnWeatherExit);
   Serial.println("btnWeatherPressed()::Displaying weather screen for " + String(weatherScreenTimeout / 60) + " minutes");
-  nowEvent = setEvent(paintWeatherModeScreen, now(), LOCAL_TIME);
+  setEvent(paintWeatherModeScreen, now(), LOCAL_TIME);
 
   deleteEvents();
-  if (alarmIsOn) {
-    timeScreenHandle = setEvent(paintTimeModeScreen, now() + weatherScreenTimeout); // return to time screen after this time period
+  if (radioIsOn) {
+    setEvent(paintTimeModeScreen, now() + weatherScreenTimeout); // return to time screen after this time period
   } else {
-    radioScreenHandle = setEvent(paintRadioScreen, now() + weatherScreenTimeout); // this needs to be every half a second to update time on screen
+    setEvent(paintRadioScreen, now() + weatherScreenTimeout);   // this needs to be every half a second to update time on screen
   }
 }
 
 void btnWeatherExit() {
   resetTFTlight();
   btnSnooze.onPressed(btnWeatherPressed);
-  nowEvent = setEvent(paintTimeModeScreen, now(), LOCAL_TIME);
+  setEvent(paintTimeModeScreen, now(), LOCAL_TIME);
 }

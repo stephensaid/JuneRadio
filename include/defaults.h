@@ -112,20 +112,20 @@ static String OPEN_WEATHER_MAP_LONGITUDE = "14.2379"; // 180.000 to -180.000 neg
 // ***************************************************************************/
 // Event handles
 // ***************************************************************************/
-static uint8_t timeScreenHandle;      // 1    update time screen (StandbyMode)
-static uint8_t weatherScreenHandle;   // 2    update weather screen
-static uint8_t radioScreenHandle;     // 3    update radio screen
-static uint8_t topbarHandle;          // 4    update topbar
-static uint8_t weatherUpdateHandle;   // 5    Update weather information
+// static uint8_t timeScreenHandle;      // 1    update time screen (StandbyMode)
+// static uint8_t weatherScreenHandle;   // 2    update weather screen
+// static uint8_t radioScreenHandle;     // 3    update radio screen
+// static uint8_t topbarHandle;          // 4    update topbar
+// static uint8_t weatherUpdateHandle;   // 5    Update weather information
 static uint8_t alarm1Handle;          // 6    to set off alarm when due
 static uint8_t alarm2Handle;          // 7    to set off alarm when due
 static uint8_t alarm3Handle;          // 8    to set off alarm when due
 static uint8_t alarm1SnoozeHandle;    // 9
 static uint8_t alarm2SnoozeHandle;    // 10
 static uint8_t alarm3SnoozeHandle;    // 11
-// // 12
-// // 13
-// // 14
-static uint8_t nowEvent;              // 15   run functions immediatly - something about interrupt... to check
+                                      // 12
+                                      // 13
+                                      // 14
+// static uint8_t nowEvent;              // 15   run functions immediatly - something about interrupt... to check
 
 #endif // defaults_h

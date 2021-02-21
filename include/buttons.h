@@ -6,6 +6,7 @@
 #include <tft.h>
 #include <defaults.h>
 #include <TFT_eSPI.h>
+#include <tft.h>
 
 void btnStandbyTurnOn();
 void turnOn();
