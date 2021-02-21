@@ -37,82 +37,89 @@ void paintTimeModeScreen() {
   Serial.println("\npaintTimeModeScreen():: Displaying clock...");
 
   deleteEvents();
-  timeScreenHandle = setEvent(paintTimeModeScreen, now() + 30); // update time screen every half a second
+  timeScreenHandle = setEvent(paintTimeModeScreen, now() + 5); // update time screen every half a second
 
   topBar(mini);
-  static String prevDate, prevAP, prevMin, prevHour, prevTemp;
+  static String prevDate, prevAP, prevMin, prevHour, prevTemp, prevWindDir;
   static float prevWindSpeed;
+  static time_t prevTime;
 
   String curHour, curMin, curAP, curDate, curTemp, bg, whole, decimal;
   int xpos, ypos;
-  float stringWidth, curWindSpeed;
+  float windSpeedWholeWidth, curWindSpeed;
 
-  curDate = " " + myTZ.dateTime("l, j F Y") + " ";
+  time_t curTime = myTZ.now();
 
-  if ( con.element.TIME_FORMAT == 1 ) {
-    // 12 HOUR FORMAT
-    curHour = myTZ.dateTime("h");
-    curMin = myTZ.dateTime("i");
-    myTZ.dateTime("A") == "AM" ? curAP = "A" : curAP = "P";
-  } else {
-    // 24 HOUR FORMAT
-    curHour = myTZ.dateTime("H");
-    curMin = myTZ.dateTime("i");
-  }
+  if (curTime != prevTime) {
 
-  tft.setTextPadding(20);
-  tft.loadFont(fM090m);
-  tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
+    curDate = " " + myTZ.dateTime("l, j F Y") + " ";
 
-  if ( prevHour != curHour ) {                                            // HOUR
-    tft.fillRect( 36,  30, 114, 70, con.element.BG_COLOUR);                         // HOUR
-    tft.drawString(curHour, 36, 30);
-    prevHour = curHour;
-    tft.fillCircle(160, 50, 6, con.element.FG_COLOUR);                    // :
-    tft.fillCircle(160, 80, 6, con.element.FG_COLOUR);
-  }
+    if ( con.element.TIME_FORMAT == 1 ) {
+      // 12 HOUR FORMAT
+      curHour = myTZ.dateTime("h");
+      curMin = myTZ.dateTime("i");
+      myTZ.dateTime("A") == "alarmAM" ? curAP = "A" : curAP = "P";
+    } else {
+      // 24 HOUR FORMAT
+      curHour = myTZ.dateTime("H");
+      curMin = myTZ.dateTime("i");
+      curAP = "";
+    }
 
-  if ( prevMin != curMin ) {                                              // MINUTES
-    tft.fillRect(170,  30, 120, 70, con.element.BG_COLOUR);               // MINUTES
-    tft.drawString(curMin, 180, 30);
-    prevMin = curMin;
-  }
+    tft.setTextPadding(20);
+    tft.loadFont(fM090m);
+    tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
 
-  tft.unloadFont();
+    if ( prevHour != curHour ) {                                            // HOUR
+      tft.fillRect( 36,  30, 114, 70, con.element.BG_COLOUR);               // HOUR
+      tft.drawString(curHour, 36, 30);
+      prevHour = curHour;
+      tft.fillCircle(160, 50, 6, con.element.FG_COLOUR);                    // :
+      tft.fillCircle(160, 80, 6, con.element.FG_COLOUR);
+    }
 
-  if ( prevAP != curAP ) {                                                 // AM - PM
-    tft.fillRect(290,  75,  24, 25, con.element.BG_COLOUR);                // AM - PM
-    tft.loadFont(f024r);
-    tft.drawString(curAP, 290, 80);
-    prevAP = curAP;
+    if ( prevMin != curMin ) {                                              // MINUTES
+      tft.fillRect(170,  30, 120, 70, con.element.BG_COLOUR);               // MINUTES
+      tft.drawString(curMin, 180, 30);
+      prevMin = curMin;
+    }
+
     tft.unloadFont();
+
+    if ( prevAP != curAP ) {                                                 // alarmAM - PM
+      tft.fillRect(290,  75,  24, 25, con.element.BG_COLOUR);                // alarmAM - PM
+      tft.loadFont(f024r);
+      tft.drawString(curAP, 290, 80);
+      tft.unloadFont();
+      prevAP = curAP;
+    }
+
+    if ( prevDate != curDate ) {                                            // DATE
+      tft.loadFont(f018r);
+      tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
+      tft.drawString(curDate, ((320 - tft.textWidth(curDate)) / 2), 115);
+      prevDate = curDate;
+      tft.unloadFont();
+    }
+    prevTime = curTime;
   }
 
-  if ( prevDate != curDate ) {                                            // DATE
-    tft.loadFont(f018r);
-    tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
-    tft.drawString(curDate, ((320 - tft.textWidth(curDate)) / 2), 115);
-    prevDate = curDate;
-    tft.unloadFont();
-  }
 
   ///  WEATHER  ///////////////////////////////////////////////////
   // check if we have weather data
   // If we do not have it or it is stale, display message
 
   time_t weatherTime = weatherData.observationTime;
-  time_t nowTime = UTC.now() - (60 * 60);
+  time_t staleWeatherTime = UTC.now() - (60 * 60);
 
-  // Serial.printf("observationTime: %d, full date: %s", weatherData.observationTime, ctime(&weatherTime));
-  // Serial.print("nowTime:");  Serial.println(nowTime);
-  // Serial.printf("nowTime        :     full date: %s", ctime(&nowTime) );
-
-  if (weatherTime > nowTime ) {
-
-    con.element.BG_COLOUR == TFT_DKGRAY ? bg = "blk" : bg = "wht";
+  if (weatherTime > staleWeatherTime ) {
     curTemp = String(weatherData.temp);
+    String windDirection = degToCompass(weatherData.windDeg);
+    curWindSpeed = weatherData.windSpeed * 3.6;
 
-    if (prevTemp != curTemp) {
+    Serial.printf("curTemp: %s; prevTemp: %s; windDirection: %s; prevWindDir: %s; curWindSpeed: %f; prevWindSpeed: %f.\n", curTemp.c_str(), prevTemp.c_str(), windDirection.c_str(), prevWindDir.c_str(), curWindSpeed, prevWindSpeed);
+
+    if ( prevTemp != curTemp || prevWindDir != windDirection || prevWindSpeed != curWindSpeed ) {
       whole = String((int)(weatherData.temp));
       decimal = String(getDecimal(weatherData.temp, 1));
 
@@ -120,91 +127,77 @@ void paintTimeModeScreen() {
       tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
       tft.fillRect( 10, 140, 200, 38, con.element.BG_COLOUR);                               // WEATHER HEADINGS
       tft.drawString(weatherData.description, 15, 155);                                            // WEATHER HEADINGS ex. scattered clouds
-      //    tft.drawString("Wind", 110, 155);                                               // WIND HEADING
       tft.unloadFont();
 
       // icons
+      tft.fillRect( 0, 190, 30, 15, con.element.BG_COLOUR);
+      con.element.BG_COLOUR == TFT_DKGRAY ? bg = "blk" : bg = "wht";
       TJpgDec.drawFsJpg( 10, 190, "/icons/temp-" + bg + ".jpg");
 
       tft.loadFont(f036r);
       tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
       xpos = 30;
       ypos = 190;
-      stringWidth = tft.textWidth(whole);
-      tft.fillRect( 30, 178,  70, 48, con.element.BG_COLOUR);                               // TEMPERATURE INTEGER
+      tft.fillRect( xpos, 178, 70, 48, con.element.BG_COLOUR);                               // TEMPERATURE INTEGER
       tft.drawString(whole, xpos, ypos);                                                    // TEMPERATURE INTEGER
+      xpos += tft.textWidth(whole);
       tft.unloadFont();
 
       tft.loadFont(f018r);
-      xpos += stringWidth;
       ypos = 204;
-      stringWidth = tft.textWidth("." + decimal);
       tft.drawString("." + decimal, xpos, ypos);                                            // TEMPERATURE DECIMAL
 
-      xpos += stringWidth - 8;
-      ypos = 180;
+      xpos += tft.textWidth("." + decimal) - 10;
+      ypos = 183;
       tft.drawString("°C", xpos, ypos);                                                     // DEGREES CELCIUS
       tft.unloadFont();
 
       prevTemp = curTemp;
     }
 
-    curWindSpeed = weatherData.windSpeed * 3.6;
-
     if ( prevWindSpeed != curWindSpeed ) {
       whole = String((int)curWindSpeed);
       tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
 
       (curWindSpeed >= 10) ? decimal = "" : decimal = String(getDecimal(curWindSpeed, 1));
+      if (decimal = "0") decimal = "";
       tft.fillRect(100, 178, 110, 48, con.element.BG_COLOUR);                               //WIND
 
       tft.loadFont(f036r);
-      xpos = 110; ypos = 190;
+      xpos = 105; ypos = 190;
       tft.drawString(whole, xpos, ypos);                                          // WIND SPEED
-      stringWidth = tft.textWidth(whole);
+      windSpeedWholeWidth = tft.textWidth(whole);
+      xpos += windSpeedWholeWidth;
       tft.unloadFont();
 
       ypos = 204;
-      if (decimal = "0") decimal = "";
       if (decimal != "" ) {
         tft.loadFont(f018r);
-        xpos += stringWidth;
         tft.drawString("." + decimal, xpos, ypos);
+        xpos += tft.textWidth(decimal);
         tft.unloadFont();                                                   // WIND SPEED DECIMAL
       }
 
       tft.loadFont(f015r);
-      xpos += stringWidth + 8;
+      xpos += 5;
       tft.drawString("km/h", xpos, ypos + 1);                                 // KM/H
       tft.unloadFont();
 
+      xpos = 105 + windSpeedWholeWidth + 5;
+      tft.loadFont(f018r);
+      tft.drawString(windDirection, xpos, 184);                             // WIND DIRECTION TEXT
+      xpos += tft.textWidth(windDirection) + 18;
+      tft.unloadFont();
+      prevWindDir = windDirection;
+
+      ypos = 187;
+      tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
+      drawArrow(xpos, ypos, 20, 13, (int32_t)weatherData.windDeg, con.element.FG_COLOUR);
       prevWindSpeed = curWindSpeed;
     }
 
-    xpos = 134;
-    tft.loadFont(f024r);
-    String windDirection = degToCompass(weatherData.windDeg);
-    Serial.printf("Wind direction: %s which is %d wide.", windDirection.c_str(), tft.textWidth(windDirection));
-    tft.drawString(windDirection, xpos, 180);  // WIND DIRECTION TEXT
-    tft.unloadFont();
-
-    xpos += tft.textWidth(windDirection) + 28 ;
-    ypos = 187;
-
-    // delay(3000);
-    //
-    // for (int d = 0; d < 360; d++ ) {
-    //   drawArrow(xpos, ypos, 20, 13, d, con.element.FG_COLOUR);
-    //   delay (10);
-    //   tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
-    // }
-    //
-    // delay(3000);
-
-    tft.fillCircle(xpos, ypos, 14, con.element.BG_COLOUR);
-    drawArrow(xpos, ypos, 20, 13, (int32_t)weatherData.windDeg, con.element.FG_COLOUR);
-
   } else {
+    tft.fillRect(0, 135, 214, 105, con.element.BG_COLOUR);
     tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
     tft.loadFont(f015r);
     tft.drawString("No weather data available", 20, 190);
@@ -248,14 +241,12 @@ void paintTimeModeScreen() {
       } else cur_next_alarm = alarm3;
     }
 
-    Serial.print("Alarm 1    : "); Serial.println(myTZ.dateTime(alarm1));
-    Serial.print("Alarm 2    : "); Serial.println(myTZ.dateTime(alarm2));
-    Serial.print("Alarm 3    : "); Serial.println(myTZ.dateTime(alarm3));
-    Serial.print("Next alarm : "); Serial.println(myTZ.dateTime(cur_next_alarm));
-
-    // time_t cur_next_alarm = min(alarm1, min(alarm2, alarm3));
-
     if (cur_next_alarm != prev_next_alarm) {
+      Serial.print("Alarm 1    : "); Serial.println(myTZ.dateTime(alarm1));
+      Serial.print("Alarm 2    : "); Serial.println(myTZ.dateTime(alarm2));
+      Serial.print("Alarm 3    : "); Serial.println(myTZ.dateTime(alarm3));
+      Serial.print("Next alarm : "); Serial.println(myTZ.dateTime(cur_next_alarm));
+
       tft.fillRect(210, 178, 110, 48, con.element.BG_COLOUR);                     // ALARM BACKGROUND
       tft.loadFont(f018r);                                                        // Alarm Headings
       tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
@@ -266,20 +257,21 @@ void paintTimeModeScreen() {
       tft.loadFont(f036r);
       xpos = 215; ypos = 190;
 
-      String alarm, AM = "";
+      String alarm, alarmAM = "";
       if (con.element.TIME_FORMAT == 1) {
-        alarm = dateTime(cur_next_alarm, "g:i");
-        myTZ.dateTime(cur_next_alarm, "A") == "AM" ? AM = "A" : AM = "P";
+        alarm = myTZ.dateTime(cur_next_alarm, "g:i");
+        myTZ.dateTime(cur_next_alarm, "A") == "alarmAM" ? alarmAM = "A" : alarmAM = "P";
       } else {
-        alarm = dateTime(cur_next_alarm, "H:i");
+        alarm = myTZ.dateTime(cur_next_alarm, "H:i");
+        alarmAM = "";
       }
+
       tft.drawString(alarm, xpos, ypos);                                        // ALARM
-      stringWidth = tft.textWidth(alarm);
+      xpos += tft.textWidth(alarm) + 3; ypos = 204;
       tft.unloadFont();
 
       tft.loadFont(f018r);
-      xpos += stringWidth + 3; ypos = 204;
-      tft.drawString(AM, xpos, ypos);                                            // ALARM AM FM
+      tft.drawString(alarmAM, xpos, ypos);                                            // ALARM alarmAM FM
       tft.unloadFont();
 
       prev_next_alarm = cur_next_alarm;
