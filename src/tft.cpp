@@ -117,7 +117,7 @@ void paintTimeModeScreen() {
     String windDirection = degToCompass(weatherData.windDeg);
     curWindSpeed = weatherData.windSpeed * 3.6;
 
-    Serial.printf("curTemp: %s; prevTemp: %s; windDirection: %s; prevWindDir: %s; curWindSpeed: %f; prevWindSpeed: %f.\n", curTemp.c_str(), prevTemp.c_str(), windDirection.c_str(), prevWindDir.c_str(), curWindSpeed, prevWindSpeed);
+    // Serial.printf("curTemp: %s; prevTemp: %s; windDirection: %s; prevWindDir: %s; curWindSpeed: %f; prevWindSpeed: %f.\n", curTemp.c_str(), prevTemp.c_str(), windDirection.c_str(), prevWindDir.c_str(), curWindSpeed, prevWindSpeed);
 
     if ( prevTemp != curTemp || prevWindDir != windDirection || prevWindSpeed != curWindSpeed ) {
       whole = String((int)(weatherData.temp));
@@ -260,7 +260,7 @@ void paintTimeModeScreen() {
       String alarm, alarmAM = "";
       if (con.element.TIME_FORMAT == 1) {
         alarm = myTZ.dateTime(cur_next_alarm, "g:i");
-        myTZ.dateTime(cur_next_alarm, "A") == "alarmAM" ? alarmAM = "A" : alarmAM = "P";
+        myTZ.dateTime(cur_next_alarm, "A") == "AM" ? alarmAM = "A" : alarmAM = "P";
       } else {
         alarm = myTZ.dateTime(cur_next_alarm, "H:i");
         alarmAM = "";
@@ -353,7 +353,7 @@ void topBar(topbar t) {
       ypos = 5;
   String curTime = "";
 
-  // if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
+  if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
 
   spr.createSprite(320, 20);
   spr.fillSprite(con.element.BG_COLOUR);
