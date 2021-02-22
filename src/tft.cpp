@@ -33,40 +33,6 @@ void waitWelcomeScreen() {
 // Paramters : None
 // Returns   : None
 /***************************************************************/
-
-void paintTimeModeScreen2() {
-  tft.fillScreen(TFT_BLACK);
-
-  spr.createSprite(320, 100);
-
-  spr.fillSprite(TFT_BLACK);
-  spr.setTextColor(TFT_WHITE, TFT_BLACK);
-
-  spr.loadFont(FM090M);
-  Serial.println("Test 1: FM090M");
-  spr.drawString("19 80", 10, 0);
-  spr.unloadFont();
-
-  spr.loadFont(F036R);
-  Serial.println("Test 2: F036R");
-  spr.drawString("Test 2", 10, 40);
-  spr.unloadFont();
-
-  spr.loadFont(F012R);
-  Serial.println("Test 3: F012R");
-  spr.drawString("Test 3", 10, 170);
-  spr.unloadFont();
-
-  spr.loadFont(F036R);
-  Serial.println("Test 4: F036R");
-  spr.drawString("Test 4", 150, 170);
-  spr.unloadFont();
-
-  spr.pushSprite(0, 20, TFT_BLACK);
-  spr.deleteSprite();
-}
-
-
 void paintTimeModeScreen() {
   Serial.println("\npaintTimeModeScreen():: Displaying clock...");
 
