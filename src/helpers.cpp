@@ -389,13 +389,14 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) 
 // Returns   :  -5 if it fails and 1 if successful
 // Reference : https://www.arduino.cc/en/Reference/WiFiStatus
 /*************************************************************/
-int Start_WiFi() {
+void Start_WiFi() {
   String wifiSSID     = con.element.WIFI_SSID;
   String wifiPassword = con.element.WIFI_PASSWORD;
 
   if ( wifiSSID == "" ) {
     Serial.println("\r\nStart_WiFi::Wi-Fi failed to connect. SSID not set in config file.");
-    return -5;
+    // return -5;
+    return;
   }
 
   Serial.printf("\r\nStart_WiFi::Connecting to %s.\n", wifiSSID.c_str() );
@@ -404,11 +405,12 @@ int Start_WiFi() {
   while ( WiFi.status() != WL_CONNECTED ) {
     WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
     unsigned long t = millis();
-    while (millis() < t + 800) { }
+    while (millis() < t + 500) { }
     Serial.print(".");
     if (connAttempts > 4) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
-      return -5;
+      // return -5;
+      return;
     }
     connAttempts++;
   }
@@ -416,7 +418,7 @@ int Start_WiFi() {
   Serial.print( "\nStart_WiFi::Wi-Fi Connected. IP: " );
   Serial.println(WiFi.localIP());
   getInternetTime();
-  return 1;
+  // return 1;
 }
 
 /*************************************************************/
@@ -448,4 +450,8 @@ void getInternetTime() {
 /*************************************************************/
 void showDirection(ESPRotary& volume) {
   Serial.println(volume.directionToString(volume.getDirection()));
+}
+
+void clearScreen() {
+  tft.fillScreen(con.element.BG_COLOUR);
 }

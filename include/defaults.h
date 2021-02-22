@@ -33,15 +33,15 @@
 // #define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
 #define TFT_LED  			       22 //3	 // TFT PIN 8
 
-#define f012m   "fonts/Roboto-Med-012"
-#define f009r   "fonts/Roboto-Reg-009"
-#define f012r   "fonts/Roboto-Reg-012"
-#define f015r   "fonts/Roboto-Reg-015"
-#define f018r   "fonts/Roboto-Reg-018"
-#define f024r   "fonts/Roboto-Reg-024"
-#define f036r   "fonts/Roboto-Reg-036"
-#define fM048m  "fonts/RobotoM-Med-48" 	 // numbers only
-#define fM090m  "fonts/RobotoM-Med-90"		 // numbers only
+#define F012M   "fonts/Roboto-Med-012"
+#define F009R   "fonts/Roboto-Reg-009"
+#define F012R   "fonts/Roboto-Reg-012"
+#define F015R   "fonts/Roboto-Reg-015"
+#define F018R   "fonts/Roboto-Reg-018"
+#define F024R   "fonts/Roboto-Reg-024"
+#define F036R   "fonts/Roboto-Reg-036"
+#define FM048M  "fonts/RobotoM-Med-48" 	 // numbers only
+#define FM090M  "fonts/RobotoM-Med-90"  // numbers only
 
 // ***************************************************************************
 // Encoder and button Pin settings
