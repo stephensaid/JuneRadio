@@ -17,7 +17,7 @@ void btnVolumePressed() {
   static int vol_this_position;
   vol_this_position = volume.getPosition();
   if (vol_this_position == 0) {
-    volume.setPosition(vol_last_position);
+    volume.resetPosition(vol_last_position);
   } else {
     vol_last_position = vol_this_position;
     volume.resetPosition(); // set to 0 (Mute)

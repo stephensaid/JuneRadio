@@ -128,7 +128,7 @@ void setup() {
   tft.init();
   tft.setRotation(3);                   // Set TFT orientation
   tft.setSwapBytes(true);               // We need to swap the colour bytes (endianess)
-  //4.setColorDepth(16);                // 16 bit colour needed to show antialiased fonts
+  spr.setColorDepth(16);                // 16 bit colour needed to show antialiased fonts
   TJpgDec.setCallback(tft_output);      // The decoder must be given the exact name of the rendering function above
 
   displayWelcomeScreen();
@@ -137,7 +137,7 @@ void setup() {
 
   void setInterval(uint16_t hour = 1);  // update internet time every 1 hour
 
-  volume.resetPosition();
+  volume.resetPosition(); // setting volume to 0
 
   attachInterrupt(SELECTOR_A_PIN, selector_interrupt, CHANGE);
   attachInterrupt(SELECTOR_B_PIN, selector_interrupt, CHANGE);
@@ -187,7 +187,7 @@ void loop() {
 
 // void loadFile(const char *name) {
 //   tft.fillScreen(con.element.BG_COLOUR);
-//   tft.loadFont(f015r);
+//   tft.loadFont(F015R);
 //
 //   // Time recorded for test purposes
 //   uint32_t t = millis();

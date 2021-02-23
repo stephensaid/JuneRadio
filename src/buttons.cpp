@@ -9,7 +9,7 @@ extern void setButtonDefaultOn();
 extern void selectRadioMode();
 extern void exitMainMenu();
 extern void paintTopbar();
-
+extern void clearScreen();
 
 /*******************************************************/
 // Purpose   : Turn on the radio
@@ -27,12 +27,11 @@ void turnOn() {
   resetTFTlight();      // light up TFT
   setButtonDefaultOn(); // change button behaviour
 
-  Serial.println("btnStandbyTurnOn():: Need to set to radio mode here");
-  Serial.println("btnStandbyTurnOn():: Radio ON\n");
+  Serial.println("turnOn():: Need to set to radio mode here");
+  Serial.println("turnOn():: Radio ON\n");
 
   // wake up ESP 32 and power up MP3 decoder and amplifier
-  tft.fillScreen(con.element.BG_COLOUR);  // clear TFT
-  // update screen
+  clearScreen();
   paintRadioScreen();
 
   selectRadioMode();
@@ -43,10 +42,14 @@ void btnStandbyTurnOff() {
 }
 
 void turnOff() {
+  deleteEvents();
   radioIsOn = false;
+  // lowerTftLED();
   setButtonDefaultOff();
-  lowerTftLED();
-  tft.fillScreen(con.element.BG_COLOUR);
+
+  Serial.println("turnOff():: Switch to Standby Mode");
+
+  clearScreen();
   paintTimeModeScreen();
 
   // Make sure that MP3 decoder and amplifier has their power cut out
