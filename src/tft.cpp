@@ -68,7 +68,7 @@ void paintTimeModeScreen() {
     }
 
     tft.setTextPadding(20);
-    tft.loadFont(fM090m);
+    tft.loadFont(f90L);
     tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
 
     if ( prevHour != curHour ) {                                            // HOUR
