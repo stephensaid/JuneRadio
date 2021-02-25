@@ -21,6 +21,8 @@ extern void volumeChanged(ESPRotary& r);
 extern void btnSelectorPressed();
 extern void btnMenuSelect();
 extern void selectorChanged(ESPRotary& r);
+extern void callFormatSPIFFS();
+
 
 int dir;
 
@@ -98,7 +100,7 @@ void menu( int d, boolean click, menus m) {
       paintTopbar();
       drawKnob();
       tft.fillRect(28, 38, 200, 40, con.element.BG_COLOUR);
-      tft.loadFont(F036R);
+      tft.loadFont(F36L);
       tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
 
       switch (curMenu) {
@@ -156,7 +158,7 @@ void menu( int d, boolean click, menus m) {
 
       tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
 
-      tft.loadFont(F018R);
+      tft.loadFont(F18L);
       tft.fillRect(80, 93, 210, 25, con.element.BG_COLOUR);
       tft.drawString(strPrev, 70, 95);
 
@@ -164,13 +166,13 @@ void menu( int d, boolean click, menus m) {
       tft.drawString(strNext, 70, 180);
       tft.unloadFont();
 
-      tft.loadFont(F024R);
+      tft.loadFont(F24L);
       tft.fillRect(90, 133, 210, 25, con.element.BG_COLOUR);
       tft.drawString(strThis, 90, 135);
       tft.unloadFont();
   }
 
-  if (DevMode) grid(10);
+  if (GRID_ON) grid(10);
 }
 
 /*******************************************************/
@@ -192,7 +194,7 @@ void invokeMainMenu() {
 void exitMainMenu() {
   resetTFTlight();
   setButtonDefaultOn();
-  tft.fillScreen(con.element.BG_COLOUR);
+  clearScreen();
   paintRadioScreen();
 }
 
@@ -244,7 +246,7 @@ void setButtonDefaultInMenu() {
 void setButtonDefaultOff() {
   btnStandby.onPressed(btnStandbyTurnOn);
   btnMenu.onPressed(disableControl);
-  btnMode.onPressed(disableControl);
+  btnMode.onPressed(callFormatSPIFFS);
 
   btnSnooze.onPressed(btnWeatherPressed);
 

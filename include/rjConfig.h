@@ -37,7 +37,7 @@ class rjConfig {
     void printFile(const char *filename);
     void resetConfiguration(const char *filename, Config &config);
     // String _conFilename;
-    File _configFile;
+    // File _configFile;
 };
 
 #endif //rjConfig_h

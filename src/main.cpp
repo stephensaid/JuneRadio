@@ -22,6 +22,7 @@
 extern void setButtonDefaultOff();
 
 void loadFile(const char *name);
+void formatSPIFFS();
 
 /********* INITIALIZATION CODE *********/
 // Encoders setup
@@ -60,16 +61,17 @@ void setup() {
   }
   Serial.println("SPIFFS Initialisation done.");
 
+  // formatSPIFFS();
+
   bool font_missing = false;        // ESP32 will crash if any of the fonts are missing
-  if (SPIFFS.exists("/fonts/Roboto-Med-012.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-009.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-012.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-015.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-018.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-024.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/Roboto-Reg-036.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/RobotoM-Med-48.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/RobotoM-Med-90.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-10.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-12.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-15.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-18.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-24.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-36.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Light-90.vlw")    == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Bold-14.vlw" )     == false) font_missing = true;
 
   if (font_missing) {
     Serial.println("\r\nFont missing in SPIFFS, did you upload it?");
@@ -80,19 +82,6 @@ void setup() {
 
   Serial.println("\n\n---- Listing files ----\n");
   listAllFiles();
-
-  bool formatSpiffs = false;
-  if (formatSpiffs) {
-    bool formatted = SPIFFS.format();
-    if (formatted) {
-     Serial.println("\n\nSuccess formatting");
-    } else {
-     Serial.println("\n\nError formatting");
-    }
-
-    Serial.println("\n\n----Listing files after format----");
-    listAllFiles();
-  }
 
   /*
     First we configure the wake up source
@@ -109,13 +98,15 @@ void setup() {
   // Load config for the first time
   Serial.println(F("Loading configuration..."));
   con.loadConfig();
-  con.saveConfig(); // to include all the new elemenets in file, if any
+  Serial.println(F("\nPrint config file..."));
+  // con.printConfig();
+  // con.saveConfig(); // to include all the new elemenets in file, if any
 
   // Reset config file
   // con.resetConfig();
 
   // Dump config file
-  Serial.println(F("Print config file..."));
+  Serial.println(F("\nPrint config file..."));
   con.printConfig();
 
   //Print the wakeup reason for ESP32
@@ -184,10 +175,20 @@ void loop() {
   // }
 }
 
+void formatSPIFFS() {
+    bool formatted = SPIFFS.format();
+    if (formatted) {
+     Serial.println("\n\nSuccess formatting");
+    } else {
+     Serial.println("\n\nError formatting");
+    }
+    Serial.println("\n\n----Listing files after format----");
+    listAllFiles();
+}
 
 // void loadFile(const char *name) {
 //   tft.fillScreen(con.element.BG_COLOUR);
-//   tft.loadFont(F015R);
+//   tft.loadFont(F15L);
 //
 //   // Time recorded for test purposes
 //   uint32_t t = millis();

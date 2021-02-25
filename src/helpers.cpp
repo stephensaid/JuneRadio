@@ -326,7 +326,7 @@ void deleteEvents() {
   deleteEvent(paintRadioScreen);
   deleteEvent(paintTopbar);
 
-  delay(30);
+  // delay(30);
 }
 
 /*******************************************************/
@@ -410,6 +410,7 @@ void Start_WiFi() {
     if (connAttempts > 4) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
       // return -5;
+      getInternetTime();
       return;
     }
     connAttempts++;
@@ -450,8 +451,4 @@ void getInternetTime() {
 /*************************************************************/
 void showDirection(ESPRotary& volume) {
   Serial.println(volume.directionToString(volume.getDirection()));
-}
-
-void clearScreen() {
-  tft.fillScreen(con.element.BG_COLOUR);
 }

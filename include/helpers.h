@@ -35,6 +35,6 @@ void print_wakeup_reason();
 bool tft_output(int16_t, int16_t, uint16_t, uint16_t, uint16_t*);
 void Start_WiFi();
 void getInternetTime();
-void clearScreen();
+
 
 #endif // helpers_h
