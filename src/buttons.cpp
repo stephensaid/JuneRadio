@@ -10,6 +10,9 @@ extern void selectRadioMode();
 extern void exitMainMenu();
 extern void paintTopbar();
 extern void clearScreen();
+extern void formatSPIFFS();
+extern void paintTimeModeScreen_reset();
+extern void paintRadioScreen_reset();
 
 /*******************************************************/
 // Purpose   : Turn on the radio
@@ -19,6 +22,11 @@ extern void clearScreen();
 /*******************************************************/
 void btnStandbyTurnOn() {
   setEvent(turnOn, now(), LOCAL_TIME);
+}
+
+//tmp function
+void callFormatSPIFFS() {
+  setEvent(formatSPIFFS, now());
 }
 
 void turnOn() {
@@ -88,21 +96,35 @@ void btnModePressed() {
 // Returns   :
 /*******************************************************/
 void btnWeatherPressed() {
-  resetTFTlight();
-  btnSnooze.onPressed(btnWeatherExit);
-  Serial.println("btnWeatherPressed()::Displaying weather screen for " + String(weatherScreenTimeout / 60) + " minutes");
-  setEvent(paintWeatherModeScreen, now(), LOCAL_TIME);
-
   deleteEvents();
+  Serial.println("btnWeatherPressed():: Displaying weather screen for " + String(weatherScreenTimeout / 60) + " minute/s");
+  resetTFTlight();
+  clearScreen();
+  btnSnooze.onPressed(btnWeatherExit);
+
   if (radioIsOn) {
-    setEvent(paintTimeModeScreen, now() + weatherScreenTimeout); // return to time screen after this time period
+    setEvent(paintRadioScreen_reset, now() + weatherScreenTimeout);     // this needs to be every half a second to update time on screen
   } else {
-    setEvent(paintRadioScreen, now() + weatherScreenTimeout);   // this needs to be every half a second to update time on screen
+    setEvent(paintTimeModeScreen_reset, now() + weatherScreenTimeout);  // return to time screen after this time period
   }
+
+  setEvent(paintWeatherModeScreen, now(), LOCAL_TIME);
 }
 
+/*******************************************************/
+// Purpose   :
+//
+// Paramters :
+// Returns   :
+/*******************************************************/
 void btnWeatherExit() {
+  Serial.println("btnWeatherExit():: Exit Weather screen\n");
   resetTFTlight();
   btnSnooze.onPressed(btnWeatherPressed);
-  setEvent(paintTimeModeScreen, now(), LOCAL_TIME);
+
+  if (radioIsOn) {
+    setEvent(paintTimeModeScreen_reset, now() + weatherScreenTimeout);
+  } else {
+    setEvent(paintRadioScreen_reset, now() + weatherScreenTimeout);
+  }
 }

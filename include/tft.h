@@ -29,7 +29,12 @@ void paintTimeModeScreen();
 void paintWeatherModeScreen();
 void paintRadioScreen();
 void topBar(topbar t = basic);
+void paintTopbar();
+void paintTimeModeScreen_reset();
+void paintRadioScreen_reset();
 void resetTFTlight();
 void lowerTftLED();
+void clearScreen();
+
 
 #endif //tft_h

@@ -1,15 +1,18 @@
+
 #ifndef defaults_h
 #define defaults_h
 
 #include <Arduino.h>
 
-#define DevMode 0   // -1 for true or 0 for false
+#define GRID_ON 0   // -1 for true or 0 for false
+#define DEBUG_INFO 0
 
 // ***************************************************************************
 // TFT Settings
 // ***************************************************************************
 // Color definitions using RGB565 (not RGB888)
 // Colour Picker: https://chrishewett.com/blog/true-rgb565-colour-picker/
+// Hexadecimal to Decimal converter: https://www.rapidtables.com/convert/number/hex-to-decimal.html
 #define TFT_BLACK       0x0000      /*   0,   0,   0 */
 #define TFT_DKGRAY      0x18e3      /*  25,  28,  25   #191C19 */
 #define TFT_WHITE       0xFFFF      /* 255, 255, 255 */
@@ -33,15 +36,14 @@
 // #define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
 #define TFT_LED  			       22 //3	 // TFT PIN 8
 
-#define F012M   "fonts/Roboto-Med-012"
-#define F009R   "fonts/Roboto-Reg-009"
-#define F012R   "fonts/Roboto-Reg-012"
-#define F015R   "fonts/Roboto-Reg-015"
-#define F018R   "fonts/Roboto-Reg-018"
-#define F024R   "fonts/Roboto-Reg-024"
-#define F036R   "fonts/Roboto-Reg-036"
-#define FM048M  "fonts/RobotoM-Med-48" 	 // numbers only
-#define FM090M  "fonts/RobotoM-Med-90"  // numbers only
+#define F10L   "fonts/NotoSans-Light-10"
+#define F12L   "fonts/NotoSans-Light-12"
+#define F15L   "fonts/NotoSans-Light-15"
+#define F18L   "fonts/NotoSans-Light-18"
+#define F24L   "fonts/NotoSans-Light-24"
+#define F36L   "fonts/NotoSans-Light-36"
+#define F14B   "fonts/NotoSans-Bold-14"
+#define F90L   "fonts/NotoSans-Light-90"		 // numbers only
 
 // ***************************************************************************
 // Encoder and button Pin settings
@@ -77,7 +79,7 @@ const int ledChannel 				         = 0;
 const int ledResolution 			       = 8;
 const int tftDelay 					         = 10;        // 10 seconds // TFT delay before turning down brightness
 const int tftSleepBrightness 		     = 80;        // TFT brightness after delay - Value of brightness for the TFT LED (not time)
-const int weatherScreenTimeout  	   =  5 * 60;   // weather screen will return to time screen after this number of minutes
+const int weatherScreenTimeout  	   =  1 * 60;   // weather screen will return to time screen after this number of minutes
 const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
 
 const String menu_main_name       	 = "Main Menu" ;
