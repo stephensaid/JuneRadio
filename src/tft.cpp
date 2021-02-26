@@ -3,6 +3,8 @@
 unsigned long timeWelcomeScreen;
 bool redraw = false;
 
+extern time_t cur_next_alarm;
+
 /*******************************************************/
 // Purpose   : Displays a welcome screen when power up
 //             for the first time while connecting to
@@ -40,56 +42,62 @@ void paintTimeModeScreen() {
 
   setEvent(paintTimeModeScreen, now() + 1);
   int xpos, ypos;
-  time_t cur_next_alarm = 0;
+  static String prevDayOfWeek;
+  String dayOfWeek = myTZ.dateTime("l");
+  if (prevDayOfWeek != dayOfWeek) redraw = true;
+  prevDayOfWeek = dayOfWeek;
 
   topBar(mini);
 
-  ///  ALARM  ///////////////////////////////////////////////////                               // ALARM
+  spr.createSprite(220, 100);       // Time
+  spr.fillSprite(con.element.BG_COLOUR);
+  spr.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
 
-  if (((con.element.ALARM_1_HOUR >= 0) && (con.element.ALARM_1_HOUR <= 24)) ||
-      ((con.element.ALARM_2_HOUR >= 0) && (con.element.ALARM_2_HOUR <= 24)) ||
-      ((con.element.ALARM_3_HOUR >= 0) && (con.element.ALARM_3_HOUR <= 24))
-     ) {
+  if (con.element.TIME_FORMAT == 1) {
+    spr.loadFont(F90L);
+    spr.setTextDatum(TR_DATUM);
+    spr.drawString(myTZ.dateTime("g"), 93, 20);
 
-    // static time_t prev_next_alarm;
-    time_t alarm1 = (time_t)(0), alarm2 = (time_t)(0), alarm3 = (time_t)(0);
+    spr.setTextDatum(TL_DATUM);
+    spr.drawString(myTZ.dateTime("i"), 115, 20);
+    spr.unloadFont();
 
-    if ((con.element.ALARM_1_HOUR >= 0) && (con.element.ALARM_1_HOUR <= 24)) {
-      alarm1 = makeTime(con.element.ALARM_1_HOUR, con.element.ALARM_1_MINUTE, 0, day(), month(), year());
-      if (now() >= alarm1) alarm1 += 24 * 3600;
-    }
+    spr.setTextDatum(TR_DATUM);
+    spr.loadFont(F14B);
+    spr.drawString(myTZ.dateTime("A"), 213 , 5); // AM or PM
+    spr.unloadFont();
+  } else {
+    spr.setTextDatum(TR_DATUM);
+    spr.drawString(myTZ.dateTime("G"), 95, 20);
 
-    if ((con.element.ALARM_2_HOUR >= 0) && (con.element.ALARM_2_HOUR <= 24)) {
-      alarm2 = makeTime(con.element.ALARM_2_HOUR, con.element.ALARM_2_MINUTE, 0, day(), month(), year());
-      if (now() >= alarm2) alarm2 += 24 * 3600;
-    }
-
-    if ((con.element.ALARM_3_HOUR >= 0) && (con.element.ALARM_3_HOUR <= 24)) {
-      alarm3 = makeTime(con.element.ALARM_3_HOUR, con.element.ALARM_3_MINUTE, 0, day(), month(), year());
-      if (now() >= alarm3) alarm3 += 24 * 3600;
-    }
-
-    if (alarm1 > 0) cur_next_alarm = alarm1;
-    if (alarm2 > 0) {
-      if (cur_next_alarm > 0) {
-        cur_next_alarm = min(alarm2, cur_next_alarm);
-      } else cur_next_alarm = alarm2;
-    }
-    if (alarm3 > 0) {
-      if (cur_next_alarm > 0) {
-        cur_next_alarm = min(alarm3, cur_next_alarm);
-      } else cur_next_alarm = alarm3;
-    }
+    spr.setTextDatum(TL_DATUM);
+    spr.drawString(myTZ.dateTime("i"), 115, 20);
+    spr.unloadFont();
   }
 
+  static bool dots;   //dots
+  if (dots) {
+    spr.loadFont(F90L);
+    spr.setTextDatum(TC_DATUM);
+    spr.drawString(":", 104, 15);
+    dots = false;
+    spr.unloadFont();
+  } else {
+    dots = true;
+  }
 
-  spr.createSprite(320, 100);       // Time
+  spr.pushSprite(100, 20);
+  spr.deleteSprite();
+
+  if (!redraw) return;    // Exit function unless we need to update the following
+
+
+  spr.createSprite(100, 100);       // Day & alarm
   spr.fillSprite(con.element.BG_COLOUR);
 
   spr.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
   spr.setTextDatum(TL_DATUM);
   spr.loadFont(F14B);
-  String dayOfWeek = myTZ.dateTime("l");
   dayOfWeek.toUpperCase();
   spr.drawString( dayOfWeek, 10, 20 );
   spr.unloadFont();
@@ -106,41 +114,6 @@ void paintTimeModeScreen() {
     }
   }
   spr.unloadFont();
-
-  spr.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
-
-  if (con.element.TIME_FORMAT == 1) {
-    spr.loadFont(F90L);
-    spr.setTextDatum(TR_DATUM);
-    spr.drawString(myTZ.dateTime("g"), 193, 20);
-
-    spr.setTextDatum(TL_DATUM);
-    spr.drawString(myTZ.dateTime("i"), 215, 20);
-    spr.unloadFont();
-
-    spr.setTextDatum(TR_DATUM);
-    spr.loadFont(F14B);
-    spr.drawString(myTZ.dateTime("A"), 313 , 5); // AM or PM
-    spr.unloadFont();
-  } else {
-    spr.setTextDatum(TR_DATUM);
-    spr.drawString(myTZ.dateTime("G"), 195, 20);
-
-    spr.setTextDatum(TL_DATUM);
-    spr.drawString(myTZ.dateTime("i"), 215, 20);
-    spr.unloadFont();
-  }
-
-  static bool dots;
-  if (dots) {
-    spr.loadFont(F90L);
-    spr.setTextDatum(TC_DATUM);
-    spr.drawString(":", 204, 15);
-    dots = false;
-    spr.unloadFont();
-  } else {
-    dots = true;
-  }
 
   spr.pushSprite(0, 20);
   spr.deleteSprite();
@@ -165,13 +138,8 @@ void paintTimeModeScreen() {
   // Serial.print("staleWeatherTime: "); Serial.println(staleWeatherTime);
   // Serial.print("weatherTime > staleWeatherTime: "); Serial.println(weatherTime > staleWeatherTime);
 
-  static bool weatherNotice;
-
   if (weatherTime > staleWeatherTime ) {
-    if (weatherNotice) {
-       tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
-       weatherNotice = false;
-    }
+    tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
     String whole = String((int)(currentWeather->temp));
     String decimal = String(getDecimal(currentWeather->temp, 1));
 
@@ -240,14 +208,7 @@ void paintTimeModeScreen() {
     spr.pushSprite(171, 120);
     spr.deleteSprite();
 
-    // static float prevWindDirection;
-    // if ( prevWindDirection != currentWeather->wind_deg) {
-      drawArrow(208, 150, 20, 13, (int32_t)currentWeather->wind_deg, con.element.FG_COLOUR);
-    // }
-    // prevWindDirection = currentWeather->wind_deg;
-
-    if (redraw)
-      tft.drawLine(170, 140, 170, (140 + 60), con.element.FG_COLOUR);
+    drawArrow(208, 150, 20, 13, (int32_t)currentWeather->wind_deg, con.element.FG_COLOUR);
 
     spr.createSprite(320, 40);
     spr.fillSprite(con.element.BG_COLOUR);
@@ -268,13 +229,8 @@ void paintTimeModeScreen() {
     spr.pushSprite(0, 200);
     spr.deleteSprite();
 
-    static String prevIcon;
-    if (prevIcon != currentWeather->icon || redraw == true) {
-      // weather icon
-      TJpgDec.drawFsJpg( 20, 130,  getWeatherIcon( currentWeather->icon ) );
-
-    }
-    prevIcon = currentWeather->icon;
+    tft.drawLine(170, 140, 170, (140 + 80), con.element.FG_COLOUR);
+    TJpgDec.drawFsJpg( 20, 130,  getWeatherIcon( currentWeather->icon ) );
 
   } else {
     tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
@@ -288,7 +244,6 @@ void paintTimeModeScreen() {
 
     spr.pushSprite(0, 120);
     spr.deleteSprite();
-    weatherNotice = true;
   }
 
   if (GRID_ON) grid(10);
@@ -302,11 +257,12 @@ void paintTimeModeScreen() {
 /*******************************************************/
 void paintWeatherModeScreen() {
   Serial.println("paintWeatherModeScreen():: Displaying weather screen...");
-  setEvent(paintTopbar, now() + 10);  // this needs to be every half a second to update time and weather info on screen
+  setEvent(paintTopbar, now() + 1);  // this needs to be every half a second to update time and weather info on screen
   // topBar(full);
 
   // fill in radio screen details here
   spr.createSprite(320, 140);
+  spr.fillSprite(con.element.BG_COLOUR);
   spr.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
   spr.loadFont(F36L);
   spr.setTextDatum(MC_DATUM);
@@ -316,27 +272,6 @@ void paintWeatherModeScreen() {
   spr.deleteSprite();
 
   redraw = false; // put as last line of code
-  /***********************************************/
-  /* TEMP MEASURE   TO EXIT   ********************/
-  return;
-  /***********************************************/
-
-  static bool firstTime = true;
-  if ( !firstTime )
-    if ( !minuteChanged() ) return;         // do nothing if time has not changed
-  firstTime = false;
-
-
-  // *************************************************
-  // if weather hasn't changed, then exit this routine
-  // *************************************************
-
-
-
-  // show last updated timestamp of weather forecast
-  Serial.print("paintWeatherModeScreen():: Last weather forecast updated: ");
-  Serial.println( dateTime(currentWeather->dt, "g:i A") );
-
 }
 
 /*******************************************************/

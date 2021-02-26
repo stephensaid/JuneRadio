@@ -8,6 +8,7 @@
 #include <JSON_Decoder.h>
 #include <OpenWeather.h>
 #include <rjConfig.h>
+#include <tft.h>
 
 extern rjConfig con;
 

@@ -1,5 +1,7 @@
 #include <helpers.h>
 
+time_t cur_next_alarm = 0;
+
 extern rjConfig con;
 extern TFT_eSPI tft;
 extern EasyButton btnSelector;
@@ -12,6 +14,7 @@ extern ESPRotary selector;
 extern ESPRotary volume;
 extern Timezone myTZ;
 extern bool radioIsOn;
+extern bool redraw;
 
 extern void setButtonDefaultOff();
 extern void setButtonDefaultOn();
@@ -206,27 +209,39 @@ int getDecimal(float f, int decimal) {
 // Returns   : None
 /****************************************************************************/
 void resetAlarms() {
-  deleteEvent(alarm1Handle);
-  deleteEvent(alarm2Handle);
-  deleteEvent(alarm3Handle);
+  time_t alarm1 = (time_t)(0), alarm2 = (time_t)(0), alarm3 = (time_t)(0);
+
+  deleteEvent(setOffAlarm);
 
   if ((con.element.ALARM_1_HOUR >= 0) && (con.element.ALARM_1_HOUR <= 24)) {
-    time_t alarm1 = makeTime(con.element.ALARM_1_HOUR, con.element.ALARM_1_MINUTE, 0, day(), month(), year());
+    alarm1 = makeTime(con.element.ALARM_1_HOUR, con.element.ALARM_1_MINUTE, 0, day(), month(), year());
     if (now() >= alarm1) alarm1 += 24 * 3600;
-    alarm1Handle = setEvent(setOffAlarm, alarm1, LOCAL_TIME);
   }
 
   if ((con.element.ALARM_2_HOUR >= 0) && (con.element.ALARM_2_HOUR <= 24)) {
-    time_t alarm2 = makeTime(con.element.ALARM_2_HOUR, con.element.ALARM_2_MINUTE, 0, day(), month(), year());
+    alarm2 = makeTime(con.element.ALARM_2_HOUR, con.element.ALARM_2_MINUTE, 0, day(), month(), year());
     if (now() >= alarm2) alarm2 += 24 * 3600;
-    alarm2Handle = setEvent(setOffAlarm, alarm2, LOCAL_TIME);
   }
 
   if ((con.element.ALARM_3_HOUR >= 0) && (con.element.ALARM_3_HOUR <= 24)) {
-    time_t alarm3 = makeTime(con.element.ALARM_3_HOUR, con.element.ALARM_3_MINUTE, 0, day(), month(), year());
+    alarm3 = makeTime(con.element.ALARM_3_HOUR, con.element.ALARM_3_MINUTE, 0, day(), month(), year());
     if (now() >= alarm3) alarm3 += 24 * 3600;
-    alarm3Handle = setEvent(setOffAlarm, alarm3, LOCAL_TIME);
   }
+
+  if (alarm1 > 0) cur_next_alarm = alarm1;
+  if (alarm2 > 0) {
+    if (cur_next_alarm > 0) {
+      cur_next_alarm = min(alarm2, cur_next_alarm);
+    } else cur_next_alarm = alarm2;
+  }
+  if (alarm3 > 0) {
+    if (cur_next_alarm > 0) {
+      cur_next_alarm = min(alarm3, cur_next_alarm);
+    } else cur_next_alarm = alarm3;
+  }
+
+  setEvent(setOffAlarm, cur_next_alarm, LOCAL_TIME);
+  redraw = true;
 }
 
 void setOffAlarm() {
@@ -251,7 +266,7 @@ void snoozeAlarm() {
 
   // stop alarm here
 
-  time_t snooze = now() + 10 * 60;
+  time_t snooze = now() + alarmSnooze;
   setEvent(setOffAlarm, snooze);
   radioIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
 }
