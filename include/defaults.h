@@ -7,6 +7,8 @@
 #define GRID_ON 0   // -1 for true or 0 for false
 #define DEBUG_INFO 0
 
+#define INTERRUPT_ATTR IRAM_ATTR
+
 // ***************************************************************************
 // TFT Settings
 // ***************************************************************************
@@ -81,7 +83,7 @@ const int tftDelay 					         = 10;        // 10 seconds // TFT delay before 
 const int tftSleepBrightness 		     = 80;        // TFT brightness after delay - Value of brightness for the TFT LED (not time)
 const int weatherScreenTimeout  	   =  1 * 60;   // weather screen will return to time screen after this number of minutes
 const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
-
+const time_t alarmSnooze             = 10 * 60;   // time to snooze alarms
 const String menu_main_name       	 = "Main Menu" ;
 const String menu_settings_name   	 = "Settings"  ;
 
@@ -105,7 +107,7 @@ Slovenian - sl, Spanish - es, Turkish - tr, Ukrainian - ua, Vietnamese - vi,
 Chinese Simplified - zh_cn, Chinese Traditional - zh_tw.
 */
 static String OPEN_WEATHER_MAP_LANGUAGE   = "en";
-static boolean IS_METRIC                  = true;
+static bool IS_METRIC                     = true;
 
 // Set both your longitude and latitude to at least 4 decimal places
 static String OPEN_WEATHER_MAP_LATITUDE =  "35.9423"; // 90.0000 to -90.0000 negative for Southern hemisphere
@@ -119,12 +121,12 @@ static String OPEN_WEATHER_MAP_LONGITUDE = "14.2379"; // 180.000 to -180.000 neg
 // static uint8_t radioScreenHandle;     // 3    update radio screen
 // static uint8_t topbarHandle;          // 4    update topbar
 // static uint8_t weatherUpdateHandle;   // 5    Update weather information
-static uint8_t alarm1Handle;          // 6    to set off alarm when due
-static uint8_t alarm2Handle;          // 7    to set off alarm when due
-static uint8_t alarm3Handle;          // 8    to set off alarm when due
-static uint8_t alarm1SnoozeHandle;    // 9
-static uint8_t alarm2SnoozeHandle;    // 10
-static uint8_t alarm3SnoozeHandle;    // 11
+// static uint8_t alarm1Handle;          // 6    to set off alarm when due
+// static uint8_t alarm2Handle;          // 7    to set off alarm when due
+// static uint8_t alarm3Handle;          // 8    to set off alarm when due
+// static uint8_t alarm1SnoozeHandle;    // 9
+// static uint8_t alarm2SnoozeHandle;    // 10
+// static uint8_t alarm3SnoozeHandle;    // 11
                                       // 12
                                       // 13
                                       // 14

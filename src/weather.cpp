@@ -6,6 +6,8 @@ OW_current  *currentWeather = new OW_current;
 OW_hourly   *hourly         = new OW_hourly;
 OW_daily    *daily          = new OW_daily;
 
+extern bool redraw;
+
 /***************************************************************/
 // Function  : Public  function
 // Purpose   : Get weather update from OpenWeatherMap using API
@@ -26,8 +28,10 @@ void getCurrentWeather() {
 
   bool parsed = ow.getForecast(currentWeather, nullptr, nullptr, OPEN_WEATHER_MAP_APP_ID, OPEN_WEATHER_MAP_LATITUDE, OPEN_WEATHER_MAP_LONGITUDE, units, OPEN_WEATHER_MAP_LANGUAGE);
 
-  if (parsed) Serial.println("Data points received");
-  else Serial.println("Failed to get data points");
+  if (parsed) {
+    redraw = true;
+    Serial.println("Data points received");
+  } else Serial.println("Failed to get data points");
 }
 
 /***************************************************************/

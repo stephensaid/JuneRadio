@@ -118,13 +118,14 @@ void btnWeatherPressed() {
 // Returns   :
 /*******************************************************/
 void btnWeatherExit() {
+  deleteEvents();
   Serial.println("btnWeatherExit():: Exit Weather screen\n");
   resetTFTlight();
   btnSnooze.onPressed(btnWeatherPressed);
 
   if (radioIsOn) {
-    setEvent(paintTimeModeScreen_reset, now() + weatherScreenTimeout);
+    setEvent(paintRadioScreen_reset, now() );
   } else {
-    setEvent(paintRadioScreen_reset, now() + weatherScreenTimeout);
+    setEvent(paintTimeModeScreen_reset, now() );
   }
 }
