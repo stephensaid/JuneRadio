@@ -24,9 +24,6 @@
 
 extern void setButtonDefaultOff();
 
-void loadFile(const char *name);
-void formatSPIFFS();
-
 /********* INITIALIZATION CODE *********/
 // Encoders setup
 ESPRotary selector = ESPRotary(SELECTOR_A_PIN, SELECTOR_B_PIN, 4);

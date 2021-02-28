@@ -5,6 +5,8 @@
 #include <Arduino.h>
 
 #define GRID_ON 0   // -1 for true or 0 for false
+
+#define DEBUG_DEBUG 1
 #define DEBUG_INFO 0
 
 #define INTERRUPT_ATTR IRAM_ATTR

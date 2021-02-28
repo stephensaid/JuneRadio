@@ -36,9 +36,8 @@ void waitWelcomeScreen() {
 // Paramters : None
 // Returns   : None
 /***************************************************************/
-
 void paintTimeModeScreen() {
-  Serial.println("\npaintTimeModeScreen():: Displaying clock...");
+  if (DEBUG_INFO) Serial.println("\npaintTimeModeScreen():: Displaying clock...");
 
   setEvent(paintTimeModeScreen, now() + 1);
   int xpos, ypos;
@@ -91,7 +90,6 @@ void paintTimeModeScreen() {
 
   if (!redraw) return;    // Exit function unless we need to update the following
 
-
   spr.createSprite(100, 100);       // Day & alarm
   spr.fillSprite(con.element.BG_COLOUR);
 
@@ -134,9 +132,11 @@ void paintTimeModeScreen() {
   time_t staleWeatherTime = UTC.now() - (60 * 60);
   String windDirection;
 
-  // Serial.print("weatherTime: "); Serial.println(weatherTime);
-  // Serial.print("staleWeatherTime: "); Serial.println(staleWeatherTime);
-  // Serial.print("weatherTime > staleWeatherTime: "); Serial.println(weatherTime > staleWeatherTime);
+  if (DEBUG_DEBUG) {
+    Serial.print("weatherTime: "); Serial.println(weatherTime);
+    Serial.print("staleWeatherTime: "); Serial.println(staleWeatherTime);
+    Serial.print("weatherTime > staleWeatherTime: "); Serial.println(weatherTime > staleWeatherTime);
+  }
 
   if (weatherTime > staleWeatherTime ) {
     tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
@@ -166,7 +166,7 @@ void paintTimeModeScreen() {
 
     spr.loadFont(F12L);
     spr.setTextDatum(BL_DATUM);
-    spr.drawString("Feels " + String(round(currentWeather->feels_like * 10) / 10.0, 1) + "°C", 3, 70);
+    spr.drawString("Feels " + String(round(currentWeather->feels_like * 10) / 10.0, 1) + "°", 3, 70);
     spr.unloadFont();
 
     spr.pushSprite(88, 120);
@@ -195,7 +195,7 @@ void paintTimeModeScreen() {
       spr.drawString("." + decimal + " km/h", xpos + 3, ypos - 5);
       xpos += spr.textWidth(decimal);
     } else {
-      spr.drawString("km/h", xpos + 5, ypos - 5);                                 // KM/H
+      spr.drawString("km/h", xpos + 5, ypos - 5);
     }
     spr.unloadFont();
 
@@ -207,7 +207,7 @@ void paintTimeModeScreen() {
     spr.loadFont(F12L );
     spr.setTextDatum(BL_DATUM);
     String uv = String( (int)(currentWeather->uvi) ) + "." + String( getDecimal(currentWeather->uvi, 1) );
-    spr.drawString("UV Index: " + uv, 60, 69);                             // WIND DIRECTION TEXT
+    spr.drawString("UV Index: " + uv, 60, 69);                       // UV Index
     spr.unloadFont();
 
     spr.pushSprite(171, 120);
@@ -314,18 +314,7 @@ void topBar(topbar t) {
       ypos = 5;
   String curTime = "";
 
-  // if ( WiFi.status() != WL_CONNECTED ) Start_WiFi();
-  // shouldn't put Start_Wifi here as it is called very frequently to update time
-  // maybe we can fire an event here, like:
-  static time_t w = 0;
-  if ( WiFi.status() != WL_CONNECTED )  {
-    Serial.print("millis(): "); Serial.print(millis());
-    Serial.print("  w: "); Serial.println(w);
-    if (  (millis() - w) > 5000 ) {
-      setEvent(Start_WiFi, now() + 1);
-      w = millis();
-    }
-  }
+  if ( WiFi.status() != WL_CONNECTED ) reConnectWiFi();
 
   spr.createSprite(320, 20);
   spr.fillSprite(con.element.BG_COLOUR);

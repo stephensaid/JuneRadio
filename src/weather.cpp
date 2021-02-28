@@ -30,8 +30,10 @@ void getCurrentWeather() {
 
   if (parsed) {
     redraw = true;
-    Serial.println("Data points received");
-  } else Serial.println("Failed to get data points");
+    if (DEBUG_INFO)Serial.println("Data points received");
+  } else {
+    if (DEBUG_DEBUG) Serial.println("Failed to get data points");
+  }
 }
 
 /***************************************************************/

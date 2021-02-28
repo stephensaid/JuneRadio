@@ -24,6 +24,8 @@ extern void paintTimeModeScreen();
 extern void paintWeatherModeScreen();
 extern void paintRadioScreen();
 extern void paintTopbar();
+extern void paintRadioScreen_reset();
+extern void paintTimeModeScreen_reset();
 
 /*******************************************************/
 // Purpose   : Draws knob for menus
@@ -78,7 +80,6 @@ void drawArrow( int32_t xpos, int32_t ypos, int32_t h, int32_t w, int32_t r, uin
 
   tft.fillTriangle(x0, y0, x1, y1, x2, y2, color);
 }
-
 
 /****************************************************************************/
 // Purpose   : Draw a circular or elliptical arc with a defined thickness
@@ -414,12 +415,11 @@ void Start_WiFi() {
 
   while ( WiFi.status() != WL_CONNECTED ) {
     WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
+    Serial.print(".");
     unsigned long t = millis();
     while (millis() < t + 500) { }
-    Serial.print(".");
     if (connAttempts > 4) {
       Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
-      // return -5;
       getInternetTime();
       return;
     }
@@ -429,7 +429,40 @@ void Start_WiFi() {
   Serial.print( "\nStart_WiFi::Wi-Fi Connected. IP: " );
   Serial.println(WiFi.localIP());
   getInternetTime();
-  // return 1;
+}
+
+void reConnectWiFi() {
+  if ( WiFi.status() == WL_CONNECTED || WiFi.status() == WL_IDLE_STATUS ) return;
+
+  static time_t w = 0;
+
+  // avoid reconnecting too often to give enough time the Start_WiFi function to connect
+  // trying reconnecting every 5 seconds
+
+  if (  millis() < ( w + 5000 ) ) {
+    Serial.println("\nreConnectWiFi():: Attempting to reconnect too soon. Exiting!");
+    return;
+  } else {
+    w = millis();
+    Serial.println("\nreConnectWiFi():: WiFi not connected. Will attempt to connect...");
+    // Serial.print("millis(): "); Serial.print(millis());
+    // Serial.print("  w: "); Serial.println(w);
+    // Serial.println();
+    Start_WiFi();
+    // yield();
+    if ( WiFi.status() == WL_CONNECTED )  {
+      deleteEvents();
+      if (radioIsOn) {
+        setEvent(paintRadioScreen_reset, now());
+      } else {
+        setEvent(paintTimeModeScreen_reset, now() );
+      }
+      Serial.println("reConnectWiFi():: Reconnected successfully!");
+    } else {
+      Serial.println("reConnectWiFi():: Failed to connect!");
+    }
+  }
+
 }
 
 /*************************************************************/
@@ -461,4 +494,20 @@ void getInternetTime() {
 /*************************************************************/
 void showDirection(ESPRotary& volume) {
   Serial.println(volume.directionToString(volume.getDirection()));
+}
+
+/*************************************************************/
+// Purpose   :  Function to format SPIFFS
+// Paramters :  None
+// Returns   :  None
+/*************************************************************/
+void formatSPIFFS() {
+    bool formatted = SPIFFS.format();
+    if (formatted) {
+     Serial.println("\n\nSuccess formatting");
+    } else {
+     Serial.println("\n\nError formatting");
+    }
+    Serial.println("\n\n----Listing files after format----");
+    listAllFiles();
 }
