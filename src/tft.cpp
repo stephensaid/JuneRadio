@@ -157,7 +157,11 @@ void paintTimeModeScreen() {
     spr.unloadFont();
 
     spr.loadFont(F15L);
-    spr.drawString("." + decimal + "°C", xpos + 1, ypos - 6 );                                            // TEMPERATURE DECIMAL
+    if ( currentWeather->temp < 10 ) {
+      spr.drawString("." + decimal + "°C", xpos + 1, ypos - 6 );                                            // TEMPERATURE DECIMAL
+    } else {
+      spr.drawString("°C", xpos + 2, ypos - 6 );
+    }
     spr.unloadFont();
 
     spr.loadFont(F12L);
@@ -202,7 +206,8 @@ void paintTimeModeScreen() {
 
     spr.loadFont(F12L );
     spr.setTextDatum(BL_DATUM);
-    spr.drawString("UV Index: " + String( round(currentWeather->uvi * 10) / 10.0), 60, 69);                             // WIND DIRECTION TEXT
+    String uv = String( (int)(currentWeather->uvi) ) + "." + String( getDecimal(currentWeather->uvi, 1) );
+    spr.drawString("UV Index: " + uv, 60, 69);                             // WIND DIRECTION TEXT
     spr.unloadFont();
 
     spr.pushSprite(171, 120);

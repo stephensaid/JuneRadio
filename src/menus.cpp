@@ -23,7 +23,6 @@ extern void btnMenuSelect();
 extern void selectorChanged(ESPRotary& r);
 extern void callFormatSPIFFS();
 
-
 int dir;
 
 /*******************************************************/
@@ -76,7 +75,6 @@ String items_alarms (menu_alarms m) {
   }
   return result;
 }
-
 
 /*******************************************************/
 // Purpose   : Menu handler
@@ -223,7 +221,7 @@ void menuBrowse() {
 }
 
 /*******************************************************/
-// Purpose   : Set button behaviour to default when
+// Purpose   : Set button behaviour defaults when
 //           : displaying a menu
 // Paramters : None
 // Returns   : None
@@ -239,16 +237,17 @@ void setButtonDefaultInMenu() {
 
 /*******************************************************/
 // Purpose   : Set button behaviour to default when
-//           : radio is in Off State
+//           : radio is in Off State (Time screen showing)
 // Paramters : None
 // Returns   : None
 /*******************************************************/
 void setButtonDefaultOff() {
-  btnStandby.onPressed(btnStandbyTurnOn);
-  btnMenu.onPressed(disableControl);
-  btnMode.onPressed(callFormatSPIFFS);
-
   btnSnooze.onPressed(btnWeatherPressed);
+  btnMode.onPressed(disableControl);
+  btnMenu.onPressed(btnMenuPressed);
+  btnStandby.onPressed(btnStandbyTurnOn);
+
+  // btnMode.onPressed(callFormatSPIFFS); //testing purposes only
 
   btnSelector.onPressed(disableControl);
   btnVolume.onPressed(disableControl);
@@ -264,14 +263,13 @@ void setButtonDefaultOff() {
 // Returns   : None
 /*******************************************************/
 void setButtonDefaultOn() {
-  btnStandby.onPressed(btnStandbyTurnOff);
-  btnMenu.onPressed(btnMenuPressed);
-  btnMode.onPressed(btnModePressed);
-
   btnSnooze.onPressed(btnWeatherPressed);
+  btnMode.onPressed(btnModePressed);
+  btnMenu.onPressed(btnMenuPressed);
+  btnStandby.onPressed(btnStandbyTurnOff);
 
-  btnSelector.onPressed(btnSelectorPressed);
-  btnVolume.onPressed(btnVolumePressed);
+  btnSelector.onPressed(disableControl);
+  btnVolume.onPressed(disableControl);
 
   selector.setChangedHandler(selectorChanged);
   volume.setChangedHandler(volumeChanged);

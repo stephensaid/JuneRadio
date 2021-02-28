@@ -16,6 +16,8 @@ extern Timezone myTZ;
 extern bool radioIsOn;
 extern bool redraw;
 
+extern void turnOn();
+extern void turnOff();
 extern void setButtonDefaultOff();
 extern void setButtonDefaultOn();
 extern void paintTimeModeScreen();
@@ -175,7 +177,6 @@ void grid (int gridspacing) {
   } // End if
 }
 
-
 /*******************************************************/
 // Purpose   : Returns the part after deciaml point as integer
 // Paramters : float f - number with decimal places
@@ -201,7 +202,6 @@ int getDecimal(float f, int decimal) {
 
   return result.toInt();
 }
-
 
 /****************************************************************************/
 // Purpose   : Resets alarms and set events
@@ -245,30 +245,25 @@ void resetAlarms() {
 }
 
 void setOffAlarm() {
-  Serial.println("setOffAlarm(): Alarm set off.");
-
-  // set off alarm here
+  Serial.println("\nsetOffAlarm(): Alarm set off.\n");
+  turnOn();
 
   btnSnooze.onPressed(snoozeAlarm);
   btnStandby.onPressed(stopAlarm);
+  btnMenu.onPressed(stopAlarm);
+  btnMode.onPressed(stopAlarm);
   resetAlarms();
 }
 
 void stopAlarm() {
-  Serial.println("stopAlarm() Alarm stopped.");
-
-  // stop alarm here
-  radioIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  Serial.println("\nstopAlarm():: Alarm stopped.\n");
+  turnOff();
 }
 
 void snoozeAlarm() {
-  Serial.println("Alarm snoozed");
-
-  // stop alarm here
-
-  time_t snooze = now() + alarmSnooze;
-  setEvent(setOffAlarm, snooze);
-  radioIsOn ? setButtonDefaultOn() : setButtonDefaultOff();
+  Serial.println("\nsnoozeAlarm():: Alarm snoozed.\n");
+  setEvent(setOffAlarm, now() + alarmSnooze);
+  turnOff();
 }
 
 /*******************************************************/
