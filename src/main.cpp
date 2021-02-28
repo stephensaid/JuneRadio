@@ -16,7 +16,7 @@ void setup() {
     Serial.println("SPIFFS initialisation failed!");
     while (1) yield();              // Stay here twiddling thumbs waiting
   }
-  Serial.println("SPIFFS Initialisation done.");
+  if (DEBUG_INFO) Serial.println("SPIFFS Initialisation done.");
 
   // formatSPIFFS();
 
@@ -28,17 +28,19 @@ void setup() {
   if (SPIFFS.exists("/fonts/NotoSans-Light-24.vlw")    == false) font_missing = true;
   if (SPIFFS.exists("/fonts/NotoSans-Light-36.vlw")    == false) font_missing = true;
   if (SPIFFS.exists("/fonts/NotoSans-Light-90.vlw")    == false) font_missing = true;
-  if (SPIFFS.exists("/fonts/NotoSans-Bold-14.vlw" )     == false) font_missing = true;
+  if (SPIFFS.exists("/fonts/NotoSans-Bold-14.vlw" )    == false) font_missing = true;
 
   if (font_missing) {
     Serial.println("\r\nFont missing in SPIFFS, did you upload it?");
     while (1) yield();
   } else {
-    Serial.println("\r\nFonts found OK.");
+    if (DEBUG_INFO) Serial.println("\r\nFonts found OK.");
   }
 
-  Serial.println("\n\n---- Listing files ----\n");
-  listAllFiles();
+  if (DEBUG_INFO) {
+    Serial.println("\n\n---- Listing files ----\n");
+    listAllFiles();
+  }
 
   /*
     First we configure the wake up source
@@ -53,9 +55,9 @@ void setup() {
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_33, 0); //1 = High, 0 = Low
 
   // Load config for the first time
-  Serial.println(F("Loading configuration..."));
+  if (DEBUG_INFO) Serial.println(F("Loading configuration..."));
   con.loadConfig();
-  Serial.println(F("\nPrint config file..."));
+  // Serial.println(F("\nPrint config file..."));
   // con.printConfig();
   // con.saveConfig(); // to include all the new elemenets in file, if any
 
@@ -63,14 +65,14 @@ void setup() {
   // con.resetConfig();
 
   // Dump config file
-  Serial.println(F("\nPrint config file..."));
+  if (DEBUG_INFO) Serial.println(F("\nPrint config file..."));
   con.printConfig();
 
   //Print the wakeup reason for ESP32
   print_wakeup_reason();
 
   // ezEvents debug mode - uncomment the following line
-  setDebug(DEBUG);
+  setDebug(INFO);
 
   // tft.begin(0x9341);                    // TFT Display
   tft.init();
@@ -122,15 +124,17 @@ void setup() {
 
 void loop() {
   events();
-}
-
-void formatSPIFFS() {
-    bool formatted = SPIFFS.format();
-    if (formatted) {
-     Serial.println("\n\nSuccess formatting");
-    } else {
-     Serial.println("\n\nError formatting");
-    }
-    Serial.println("\n\n----Listing files after format----");
-    listAllFiles();
+  // char run = 0;
+  //
+  // if( Serial.available() )  run = Serial.read();
+  //
+  // switch (run)
+  // {
+    //   case '1':
+    //   if (DEBUG_DEBUG) Serial.println("WiFi closing down...");
+    //   WiFi.disconnect(true);
+    //   break;
+    // }
+    //
+    // if ( run != 0 ) run = 0;
 }
