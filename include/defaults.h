@@ -80,10 +80,10 @@ const int ledFreq 					         = 5000;
 const int ledChannel 				         = 0;
 const int ledResolution 			       = 8;
 const int tftDelay 					         = 10;        // 10 seconds // TFT delay before turning down brightness
-const int tftSleepBrightness 		     = 80;        // TFT brightness after delay - Value of brightness for the TFT LED (not time)
+const int tftSleepBrightness 		     = 0;        // TFT brightness after delay - Value of brightness for the TFT LED (not time)
 const int weatherScreenTimeout  	   =  1 * 60;   // weather screen will return to time screen after this number of minutes
 const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
-const time_t alarmSnooze             = 10 * 60;   // time to snooze alarms
+const time_t alarmSnooze             = 1 * 60;   // time to snooze alarms
 const String menu_main_name       	 = "Main Menu" ;
 const String menu_settings_name   	 = "Settings"  ;
 

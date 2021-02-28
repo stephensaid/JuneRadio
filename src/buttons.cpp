@@ -72,7 +72,8 @@ void turnOff() {
 // Returns   :
 /*******************************************************/
 void btnMenuPressed() {
-  Serial.println("btnMenuPressed");
+  deleteEvents();
+  Serial.println("btnMenuPressed():: ");
   setEvent(invokeMainMenu, now(), LOCAL_TIME);
 }
 
