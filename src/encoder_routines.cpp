@@ -12,7 +12,7 @@ extern void menuSelect();
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void btnVolumePressed() {
+void IRAM_ATTR btnVolumePressed() {
   static int vol_last_position;
   static int vol_this_position;
   vol_this_position = volume.getPosition();
@@ -31,7 +31,7 @@ void btnVolumePressed() {
 // Paramters :
 // Returns   :
 /*******************************************************/
-void volumeChanged(ESPRotary& r) {
+void IRAM_ATTR volumeChanged(ESPRotary& r) {
   resetTFTlight();
   Serial.print("Volume   : ");
   Serial.println(r.getPosition());
@@ -44,7 +44,7 @@ void volumeChanged(ESPRotary& r) {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void btnSelectorPressed() {
+void IRAM_ATTR btnSelectorPressed() {
   resetTFTlight();
 }
 
@@ -57,6 +57,6 @@ void btnMenuSelect() { // selector encoder button pressed when in menu
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void selectorChanged(ESPRotary& r) {
+void IRAM_ATTR selectorChanged(ESPRotary& r) {
   resetTFTlight();
 }

@@ -1,15 +1,16 @@
-#include <main.h>
+#include "main.h"
 
 void setup() {
   Serial.begin(115200);             // Serial monitor setup
+  // Serial.begin(250000);             // Serial monitor setup
   Serial.println(F("\r\nsetup(): begin"));
 
   Serial.print("C++ version: ");
   Serial.println(__cplusplus);
 
   // setup TFT LED
-  ledcSetup(ledChannel, ledFreq, ledResolution);
-  ledcAttachPin(TFT_LED, ledChannel);
+  ledcSetup(LED_CHANNEL, LED_FREQ, LED_RESOLUTION);
+  ledcAttachPin(TFT_LED, LED_CHANNEL);
 
   // Initialise SPIFFS
   if (!SPIFFS.begin()) {
@@ -78,8 +79,8 @@ void setup() {
   tft.init();
   tft.setRotation(3);                   // Set TFT orientation
   tft.setSwapBytes(true);               // We need to swap the colour bytes (endianess)
-  spr.setColorDepth(16);                // 16 bit colour needed to show antialiased fonts
-  TJpgDec.setCallback(tft_output);      // The decoder must be given the exact name of the rendering function above
+  spr.setColorDepth(16);                 // 16 bit colour needed to show antialiased fonts
+  // TJpgDec.setCallback(tft_output);      // The decoder must be given the exact name of the rendering function above
 
   displayWelcomeScreen();
 

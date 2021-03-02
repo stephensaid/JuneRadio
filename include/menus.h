@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <ESPRotary.h>
 #include <TFT_eSPI.h>
+#include <TFT_eFEX.h>
 #include <tft.h>
 #include <defaults.h>
 #include <ezTime.h>

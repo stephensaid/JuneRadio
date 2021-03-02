@@ -14,6 +14,5 @@ extern rjConfig con;
 
 void getCurrentWeather();
 String getWeatherIcon(String);
-// String lastWeatherUpdateDateTime();
 
 #endif // weather_h

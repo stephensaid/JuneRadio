@@ -11,7 +11,7 @@
 #include <WiFi.h>
 
 void drawKnob();
-void drawArrow( int32_t, int32_t, int32_t, int32_t, int32_t, uint32_t);
+void drawArrow(int32_t, int32_t, int32_t, int32_t, int32_t, uint32_t);
 int fillArc(int, int, int, int, int, int, int, unsigned int);
 int getDecimal(float, int);
 String degToCompass (float);
