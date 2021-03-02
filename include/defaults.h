@@ -6,8 +6,9 @@
 
 #define GRID_ON 0   // -1 for true or 0 for false
 
-#define DEBUG_DEBUG 1
+#define DEBUG_DEBUG -1
 #define DEBUG_INFO 0
+//TODO: improve INFO, DEBUG, ERROR reporting
 
 #define INTERRUPT_ATTR IRAM_ATTR
 
@@ -28,18 +29,6 @@
 #define TFT_YELLOW      0xFFE0      /* 255, 255,   0 */
 #define TFT_BLUE        0x001F      /*   0,   0, 255 */
 
-// #define USER_SETUP_LOADED
-// #define ILI9341_DRIVER
-
-// //Pin definitions
-// #define TFT_MISO 			      19	 // TFT PIN 9
-// #define TFT_MOSI 			      23	 // TFT PIN 6
-// #define TFT_SCLK 			      18	 // TFT PIN 7
-// #define TFT_CS   			      15	 // TFT PIN 3
-// #define TFT_DC   			       2   // TFT PIN 5
-// #define TFT_RST  			      -1	 // TFT PIN 4, ESP32 PIN EN
-#define TFT_LED  			       22 //3	 // TFT PIN 8
-
 #define F10L   "fonts/NotoSans-Light-10"
 #define F12L   "fonts/NotoSans-Light-12"
 #define F15L   "fonts/NotoSans-Light-15"
@@ -52,6 +41,7 @@
 // ***************************************************************************
 // Encoder and button Pin settings
 // ***************************************************************************
+// Save Pins 12, 13, 14, 15 for Debugger
 #define SELECTOR_A_PIN      17
 #define SELECTOR_B_PIN       4
 #define SELECTOR_BTN_PIN    27		// PIN 22 does not seem to be working properly
@@ -70,24 +60,25 @@
 // ***************************************************************************
 
 #define FS_NO_GLOBALS
-#define DEG2RAD 0.0174532925
-#define volume_lower_bound 	 0
-#define volume_upper_bound 	10
+#define DEG2RAD               0.0174532925
+#define VOLUME_LOWER_BOUND 	  0
+#define VOLUME_UPPER_BOUND 	  10
+
+// PWM Constants for LED control of TFT display
+#define LED_FREQ              5000
+#define LED_CHANNEL 				  0
+#define LED_RESOLUTION 			  8
 
 #define LOCALTZ_POSIX	"CET-1CEST,M3.5.0,M10.5.0/3"		// Time in Malta
 
 /****** Set global variables  ******/
-// PWM Constants for LED control of TFT display
-const int ledFreq 					         = 5000;
-const int ledChannel 				         = 0;
-const int ledResolution 			       = 8;
-const int tftDelay 					         = 10;        // 10 seconds // TFT delay before turning down brightness
-const int tftSleepBrightness 		     = 0;        // TFT brightness after delay - Value of brightness for the TFT LED (not time)
-const int weatherScreenTimeout  	   =  1 * 60;   // weather screen will return to time screen after this number of minutes
-const time_t weatherUpdateFrequency	 = 10 * 60;   // update weather every 10 minutes (1 minute = 60)
-const time_t alarmSnooze             = 1 * 60;   // time to snooze alarms
-const String menu_main_name       	 = "Main Menu" ;
-const String menu_settings_name   	 = "Settings"  ;
+const static DRAM_ATTR int tftDelay 					          = 10;                  // 10 seconds // TFT delay before turning down brightness
+const static DRAM_ATTR int tftSleepBrightness 		      = 0;                   // TFT brightness after delay - Value of brightness for the TFT LED (not time)
+const static DRAM_ATTR int weatherScreenTimeout  	      = 1 * 60;              // weather screen will return to time screen after this number of minutes
+const static DRAM_ATTR time_t weatherUpdateFrequency	  = 10 * 60;             // update weather every 10 minutes (1 minute = 60)
+const static DRAM_ATTR time_t alarmSnooze               = 10 * 60;              // time to snooze alarms
+const static DRAM_ATTR String menu_main_name       	    = "Main Menu";
+const static DRAM_ATTR String menu_settings_name   	    = "Settings";
 
 
 // ***************************************************************************
@@ -97,8 +88,7 @@ const String menu_settings_name   	 = "Settings"  ;
    data for. It'll be a URL like https://openweathermap.org/city/2657896. The number
    at the end is what you assign to the constant below.
 // ***************************************************************************/
-static String OPEN_WEATHER_MAP_APP_ID       = "e4c90fd05cb42bca67ce2a2d34020544";
-// static String OPEN_WEATHER_MAP_LOCATION_ID  = "2563191";
+const static DRAM_ATTR String OPEN_WEATHER_MAP_APP_ID = "e4c90fd05cb42bca67ce2a2d34020544";
 /*
 Arabic - ar, Bulgarian - bg, Catalan - ca, Czech - cz, German - de, Greek - el,
 English - en, Persian (Farsi) - fa, Finnish - fi, French - fr, Galician - gl,
@@ -108,30 +98,12 @@ Portuguese - pt, Romanian - ro, Russian - ru, Swedish - se, Slovak - sk,
 Slovenian - sl, Spanish - es, Turkish - tr, Ukrainian - ua, Vietnamese - vi,
 Chinese Simplified - zh_cn, Chinese Traditional - zh_tw.
 */
-static String OPEN_WEATHER_MAP_LANGUAGE   = "en";
-static bool IS_METRIC                     = true;
+const static DRAM_ATTR String OPEN_WEATHER_MAP_LANGUAGE = "en";
+const static DRAM_ATTR bool IS_METRIC = true;
 
 // Set both your longitude and latitude to at least 4 decimal places
-static String OPEN_WEATHER_MAP_LATITUDE =  "35.9423"; // 90.0000 to -90.0000 negative for Southern hemisphere
-static String OPEN_WEATHER_MAP_LONGITUDE = "14.2379"; // 180.000 to -180.000 negative for West
+const static DRAM_ATTR String OPEN_WEATHER_MAP_LATITUDE  = "35.9423"; // 90.0000 to -90.0000 negative for Southern hemisphere
+const static DRAM_ATTR String OPEN_WEATHER_MAP_LONGITUDE = "14.2379"; // 180.000 to -180.000 negative for West
 
-// ***************************************************************************/
-// Event handles
-// ***************************************************************************/
-// static uint8_t timeScreenHandle;      // 1    update time screen (StandbyMode)
-// static uint8_t weatherScreenHandle;   // 2    update weather screen
-// static uint8_t radioScreenHandle;     // 3    update radio screen
-// static uint8_t topbarHandle;          // 4    update topbar
-// static uint8_t weatherUpdateHandle;   // 5    Update weather information
-// static uint8_t alarm1Handle;          // 6    to set off alarm when due
-// static uint8_t alarm2Handle;          // 7    to set off alarm when due
-// static uint8_t alarm3Handle;          // 8    to set off alarm when due
-// static uint8_t alarm1SnoozeHandle;    // 9
-// static uint8_t alarm2SnoozeHandle;    // 10
-// static uint8_t alarm3SnoozeHandle;    // 11
-                                      // 12
-                                      // 13
-                                      // 14
-// static uint8_t nowEvent;              // 15   run functions immediatly - something about interrupt... to check
 
 #endif // defaults_h
