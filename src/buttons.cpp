@@ -20,16 +20,16 @@ extern void paintRadioScreen_reset();
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void btnStandbyTurnOn() {
+void IRAM_ATTR btnStandbyTurnOn() {
   setEvent(turnOn, now(), LOCAL_TIME);
 }
 
 //tmp function
-void callFormatSPIFFS() {
+void IRAM_ATTR callFormatSPIFFS() {
   setEvent(formatSPIFFS, now());
 }
 
-void turnOn() {
+void IRAM_ATTR turnOn() {
   deleteEvents(); // stop screen updating as soon as possible
   radioIsOn = true;
   resetTFTlight();      // light up TFT
@@ -45,7 +45,7 @@ void turnOn() {
   selectRadioMode();
 }
 
-void btnStandbyTurnOff() {
+void IRAM_ATTR btnStandbyTurnOff() {
   setEvent(turnOff, now(), LOCAL_TIME);
 }
 
@@ -71,13 +71,13 @@ void turnOff() {
 // Paramters :
 // Returns   :
 /*******************************************************/
-void btnMenuPressed() {
+void IRAM_ATTR btnMenuPressed() {
   deleteEvents();
   Serial.println("btnMenuPressed():: ");
   setEvent(invokeMainMenu, now(), LOCAL_TIME);
 }
 
-void btnExitMainMenu() {
+void IRAM_ATTR btnExitMainMenu() {
   setEvent(exitMainMenu, now(), LOCAL_TIME);
 }
 /*******************************************************/
@@ -85,7 +85,7 @@ void btnExitMainMenu() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void btnModePressed() {
+void IRAM_ATTR btnModePressed() {
   resetTFTlight();
   setEvent(selectRadioMode, now(), LOCAL_TIME);
 }
@@ -96,7 +96,7 @@ void btnModePressed() {
 // Paramters :
 // Returns   :
 /*******************************************************/
-void btnWeatherPressed() {
+void IRAM_ATTR btnWeatherPressed() {
   deleteEvents();
   Serial.println("btnWeatherPressed():: Displaying weather screen for " + String(weatherScreenTimeout / 60) + " minute/s");
   resetTFTlight();
@@ -118,7 +118,7 @@ void btnWeatherPressed() {
 // Paramters :
 // Returns   :
 /*******************************************************/
-void btnWeatherExit() {
+void IRAM_ATTR btnWeatherExit() {
   deleteEvents();
   Serial.println("btnWeatherExit():: Exit Weather screen\n");
   resetTFTlight();

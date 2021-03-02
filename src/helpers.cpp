@@ -1,4 +1,4 @@
-#include <helpers.h>
+#include "helpers.h"
 
 time_t cur_next_alarm = 0;
 
@@ -406,7 +406,6 @@ void Start_WiFi() {
 
   if ( wifiSSID == "" ) {
     Serial.println("\r\nStart_WiFi::Wi-Fi failed to connect. SSID not set in config file.");
-    // return -5;
     return;
   }
 

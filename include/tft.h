@@ -3,18 +3,18 @@
 
 #include <Arduino.h>
 #include <TFT_eSPI.h>
-#include <TJpg_Decoder.h>
+// #include <TJpg_Decoder.h>
+#include <TFT_eFEX.h>
 #include <helpers.h>
 #include <defaults.h>
 #include <ezTime.h>
 #include <weather.h>
 
 extern OW_current *currentWeather;
-// extern OW_hourly *hourly;
-// extern OW_daily  *daily;
 extern rjConfig con;
 extern TFT_eSPI tft;
 extern TFT_eSprite spr;
+extern TFT_eFEX fex;
 extern Timezone myTZ;
 
 enum topbar {

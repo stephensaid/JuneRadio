@@ -1,6 +1,7 @@
 #include "menus.h"
 
 extern TFT_eSPI tft;
+extern TFT_eFEX fex;
 extern EasyButton btnSelector;
 extern EasyButton btnVolume;
 extern EasyButton btnMode;
@@ -99,6 +100,7 @@ void menu( int d, boolean click, menus m) {
       drawKnob();
       tft.fillRect(28, 38, 200, 40, con.element.BG_COLOUR);
       tft.loadFont(F36L);
+
       tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
 
       switch (curMenu) {

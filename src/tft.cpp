@@ -15,7 +15,9 @@ extern time_t cur_next_alarm;
 void displayWelcomeScreen() {
   Serial.println("\ndisplayWelcomeScreen():: Displaying June One logo welcome screen...");
   resetTFTlight();
-  TJpgDec.drawFsJpg(0, 0, "/juneradio.jpg"); // display welcome logo
+  //TODO: change to fex
+  fex.drawJpeg("/juneradio.jpg", 0, 0); // display welcome logo
+  // TJpgDec.drawFsJpg(0, 0, "/juneradio.jpg");
   timeWelcomeScreen = millis();
 }
 
@@ -119,7 +121,9 @@ void paintTimeModeScreen() {
   if (cur_next_alarm != 0) {
     String bg;
     con.element.BG_COLOUR == TFT_DKGRAY ? bg = "blk" : bg = "wht";
-    TJpgDec.drawFsJpg( 10, 93,  "/icons/alarm-" + bg + ".jpg" );
+    //TODO: change to fex
+    fex.drawJpeg("/icons/alarm-" + bg + ".jpg", 10, 93);
+    // TJpgDec.drawFsJpg( 10, 93,  "/icons/alarm-" + bg + ".jpg" );
   } else {
     spr.fillRect(10, 93, 15, 15, con.element.BG_COLOUR);
   }
@@ -132,7 +136,7 @@ void paintTimeModeScreen() {
   time_t staleWeatherTime = UTC.now() - (60 * 60);
   String windDirection;
 
-  if (DEBUG_DEBUG) {
+  if (DEBUG_INFO) {
     Serial.print("weatherTime: "); Serial.println(weatherTime);
     Serial.print("staleWeatherTime: "); Serial.println(staleWeatherTime);
     Serial.print("weatherTime > staleWeatherTime: "); Serial.println(weatherTime > staleWeatherTime);
@@ -235,7 +239,9 @@ void paintTimeModeScreen() {
     spr.deleteSprite();
 
     tft.drawLine(170, 140, 170, (140 + 80), con.element.FG_COLOUR);
-    TJpgDec.drawFsJpg( 20, 130,  getWeatherIcon( currentWeather->icon ) );
+    //TODO: change to fex
+    fex.drawJpeg(getWeatherIcon( currentWeather->icon ), 20, 130);
+    // TJpgDec.drawFsJpg( 20, 130,  getWeatherIcon( currentWeather->icon ) );
 
   } else {
     tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
@@ -309,7 +315,7 @@ void paintRadioScreen() {
 //           : full  - icons, time and date
 // Returns   : None
 /*******************************************************/
-void topBar(topbar t) {
+void topBar(topbar t /* = basic */) {
   int xpos = 320 - 10,
       ypos = 5;
   String curTime = "";
@@ -339,19 +345,21 @@ void topBar(topbar t) {
     spr.drawString(myTZ.dateTime("l, j F Y"), 10, ypos);
   }
 
-  spr.unloadFont();
-  spr.pushSprite(0, 0);
-  spr.deleteSprite();
-
   xpos -= 16;
-  ypos = 2;
   String wifi_icon;
   if ( WiFi.status() == WL_CONNECTED ) {
     con.element.BG_COLOUR == TFT_DKGRAY ? wifi_icon = "/icons/wifi_black.jpg" : wifi_icon = "/icons/wifi_white.jpg";
   } else {
     con.element.BG_COLOUR == TFT_DKGRAY ? wifi_icon = "/icons/wifi_off_black.jpg" : wifi_icon = "/icons/wifi_off_white.jpg";
   }
-  TJpgDec.drawFsJpg(xpos, ypos, wifi_icon);
+  fex.drawJpeg(wifi_icon, xpos, 2, &spr);
+
+  spr.unloadFont();
+  spr.pushSprite(0, 0);
+  spr.deleteSprite();
+
+  //TODO: change to fex
+  // TJpgDec.drawFsJpg(xpos, ypos, wifi_icon);
 }
 
 /*******************************************************/
@@ -395,7 +403,7 @@ void paintRadioScreen_reset() {
 /*******************************************************/
 void resetTFTlight() {
   // setEvent(lowerTftLED, now() + tftDelay );
-  ledcWrite(ledChannel, 255);
+  ledcWrite(LED_CHANNEL, 255);
 }
 
 /*******************************************************/
@@ -404,7 +412,7 @@ void resetTFTlight() {
 // Returns   : None
 /*******************************************************/
 void lowerTftLED() {
-  // ledcWrite(ledChannel, tftSleepBrightness);
+  // ledcWrite(LED_CHANNEL, tftSleepBrightness);
 }
 
 void clearScreen() {
