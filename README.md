@@ -4,7 +4,7 @@
 
 ##### The project includes
 * Physical build of the body made from wood with PVC front panel
-* PCB design for the front panel
+* [EasyEDA circuits and PCB layouts](https://easyeda.com/stephen7776/project
 * Parts list
 
 ##### Features
