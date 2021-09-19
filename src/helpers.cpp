@@ -412,21 +412,24 @@ void Start_WiFi() {
   Serial.printf("\r\nStart_WiFi::Connecting to %s.\n", wifiSSID.c_str() );
   int connAttempts = 0;
 
-  while ( WiFi.status() != WL_CONNECTED ) {
-    WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
+  WiFi.begin( wifiSSID.c_str(), wifiPassword.c_str() );
+  while ( WiFi.status() != WL_CONNECTED && connAttempts <= 10 )  {
     Serial.print(".");
     unsigned long t = millis();
     while (millis() < t + 500) { }
-    if (connAttempts > 4) {
-      Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
-      getInternetTime();
-      return;
-    }
     connAttempts++;
   }
 
-  Serial.print( "\nStart_WiFi::Wi-Fi Connected. IP: " );
-  Serial.println(WiFi.localIP());
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println( "\nStart_WiFi::Wi-Fi failed to connect." );
+    setEvent(reConnectWiFi, now() + 10000); //try to reconnect in 10 seconds
+    return;
+  } else {
+    Serial.print( "\nStart_WiFi::Wi-Fi Connected. IP: " );
+    Serial.println(WiFi.localIP());
+    WiFi.setAutoConnect(true);
+    WiFi.persistent(true);
+  }
   getInternetTime();
 }
 
@@ -440,6 +443,7 @@ void reConnectWiFi() {
 
   if (  millis() < ( w + 5000 ) ) {
     Serial.println("\nreConnectWiFi():: Attempting to reconnect too soon. Exiting!");
+    setEvent(reConnectWiFi, now() + 10000);
     return;
   } else {
     w = millis();
