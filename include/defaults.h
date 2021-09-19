@@ -7,7 +7,7 @@
 #define GRID_ON 0   // -1 for true or 0 for false
 
 #define DEBUG_DEBUG -1
-#define DEBUG_INFO 0
+#define DEBUG_INFO -1
 //TODO: improve INFO, DEBUG, ERROR reporting
 
 #define INTERRUPT_ATTR IRAM_ATTR

@@ -39,7 +39,7 @@ void waitWelcomeScreen() {
 // Returns   : None
 /***************************************************************/
 void paintTimeModeScreen() {
-  if (DEBUG_INFO) Serial.println("\npaintTimeModeScreen():: Displaying clock...");
+  // if (DEBUG_INFO) Serial.println("\npaintTimeModeScreen():: Displaying clock...");
 
   setEvent(paintTimeModeScreen, now() + 1);
   int xpos, ypos;

@@ -19,6 +19,7 @@ void getCurrentWeather() {
   setEvent(getCurrentWeather, now() + weatherUpdateFrequency );
   if ( WiFi.status() != WL_CONNECTED ) {
     Serial.println("getCurrentWeather():: Weather update failed because Wi-Fi is not connected!");
+    setEvent(reConnectWiFi, now() + 1);
     return;
   }
   if (DEBUG_INFO) Serial.println("getCurrentWeather():: Requesting weather information from OpenWeatherMap.org...");
@@ -30,9 +31,9 @@ void getCurrentWeather() {
 
   if (parsed) {
     redraw = true;
-    if (DEBUG_INFO)Serial.println("Data points received");
+    if (DEBUG_INFO)Serial.println("getCurrentWeather():: Data points received");
   } else {
-    if (DEBUG_DEBUG) Serial.println("Failed to get data points");
+    if (DEBUG_DEBUG) Serial.println("getCurrentWeather():: Failed to get data points");
   }
 }
 
