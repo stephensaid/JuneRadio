@@ -44,7 +44,7 @@
 // Save Pins 12, 13, 14, 15 for Debugger
 #define SELECTOR_A_PIN      17
 #define SELECTOR_B_PIN       4
-#define SELECTOR_BTN_PIN    27		// PIN 22 does not seem to be working properly
+#define SELECTOR_BTN_PIN    35		// PIN 22 does not seem to be working properly
 
 #define VOLUME_A_PIN        36
 #define VOLUME_B_PIN        39
