@@ -125,17 +125,4 @@ void setup() {
 
 void loop() {
   events();
-  // char run = 0;
-  //
-  // if( Serial.available() )  run = Serial.read();
-  //
-  // switch (run)
-  // {
-    //   case '1':
-    //   if (DEBUG_DEBUG) Serial.println("WiFi closing down...");
-    //   WiFi.disconnect(true);
-    //   break;
-    // }
-    //
-    // if ( run != 0 ) run = 0;
 }
