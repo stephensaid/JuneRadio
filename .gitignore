@@ -1,7 +1,8 @@
 
-.gitignore
 .pio
 .clang_complete
 .gcc-flags.json
 data/config.txt
 assets/fritzing
+.vscode
+.gitignore
