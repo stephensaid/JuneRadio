@@ -2,7 +2,6 @@
 
 void setup() {
   Serial.begin(115200);             // Serial monitor setup
-  // Serial.begin(250000);             // Serial monitor setup
   Serial.println(F("\r\nsetup(): begin"));
 
   Serial.print("C++ version: ");

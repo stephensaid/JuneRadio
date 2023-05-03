@@ -292,6 +292,7 @@ void btnModeInterruptISR() {
   btnMode.read();
 }
 
+// blue button
 void btnStandbyInterruptISR() {
   btnStandby.read();
 }
