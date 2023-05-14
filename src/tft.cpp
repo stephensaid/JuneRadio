@@ -15,9 +15,7 @@ extern time_t cur_next_alarm;
 void displayWelcomeScreen() {
   Serial.println("\ndisplayWelcomeScreen():: Displaying June One logo welcome screen...");
   resetTFTlight();
-  //TODO: change to fex
-  fex.drawJpeg("/juneradio.jpg", 0, 0); // display welcome logo
-  // TJpgDec.drawFsJpg(0, 0, "/juneradio.jpg");
+  fex.drawJpgFile(SPIFFS, "/juneradio.jpg", 0, 0);
   timeWelcomeScreen = millis();
 }
 
@@ -121,9 +119,8 @@ void paintTimeModeScreen() {
   if (cur_next_alarm != 0) {
     String bg;
     con.element.BG_COLOUR == TFT_DKGRAY ? bg = "blk" : bg = "wht";
-    //TODO: change to fex
-    fex.drawJpeg("/icons/alarm-" + bg + ".jpg", 10, 93);
-    // TJpgDec.drawFsJpg( 10, 93,  "/icons/alarm-" + bg + ".jpg" );
+    fex.drawJpgFile(SPIFFS, ("/icons/alarm-" + bg + ".jpg").c_str(), 10, 93);
+
   } else {
     spr.fillRect(10, 93, 15, 15, con.element.BG_COLOUR);
   }
@@ -239,9 +236,7 @@ void paintTimeModeScreen() {
     spr.deleteSprite();
 
     tft.drawLine(170, 140, 170, (140 + 80), con.element.FG_COLOUR);
-    //TODO: change to fex
-    fex.drawJpeg(getWeatherIcon( currentWeather->icon ), 20, 130);
-    // TJpgDec.drawFsJpg( 20, 130,  getWeatherIcon( currentWeather->icon ) );
+    fex.drawJpgFile(SPIFFS, getWeatherIcon( currentWeather->icon ).c_str(), 20, 130);
 
   } else {
     tft.fillRect( 0, 120, 320, 80, con.element.BG_COLOUR);
@@ -346,20 +341,18 @@ void topBar(topbar t /* = basic */) {
   }
 
   xpos -= 16;
-  String wifi_icon;
+  const char* wifi_icon;
   if ( WiFi.status() == WL_CONNECTED ) {
     con.element.BG_COLOUR == TFT_DKGRAY ? wifi_icon = "/icons/wifi_black.jpg" : wifi_icon = "/icons/wifi_white.jpg";
   } else {
     con.element.BG_COLOUR == TFT_DKGRAY ? wifi_icon = "/icons/wifi_off_black.jpg" : wifi_icon = "/icons/wifi_off_white.jpg";
   }
-  fex.drawJpeg(wifi_icon, xpos, 2, &spr);
-
+  
   spr.unloadFont();
-  spr.pushSprite(0, 0);
+  spr.pushSprite(0, 0); // output sprite to screen
   spr.deleteSprite();
 
-  //TODO: change to fex
-  // TJpgDec.drawFsJpg(xpos, ypos, wifi_icon);
+  fex.drawJpgFile(SPIFFS, wifi_icon, xpos, 2);
 }
 
 /*******************************************************/
