@@ -7,7 +7,7 @@
 #define GRID_ON 0   // -1 for true or 0 for false
 
 #define DEBUG_DEBUG -1
-#define DEBUG_INFO 0
+#define DEBUG_INFO -1
 //TODO: improve INFO, DEBUG, ERROR reporting
 
 #define INTERRUPT_ATTR IRAM_ATTR
@@ -38,6 +38,8 @@
 #define F14B   "fonts/NotoSans-Bold-14"
 #define F90L   "fonts/NotoSans-Light-90"		 // numbers only
 
+#define TFT_LED 22
+
 // ***************************************************************************
 // Encoder and button Pin settings
 // ***************************************************************************
@@ -50,10 +52,10 @@
 #define VOLUME_B_PIN        39
 #define VOLUME_BTN_PIN      34
 
-#define MODE_PIN   			    21
-#define STANDBY_PIN  		    33
-#define SNOOZE_PIN			    16
-#define MENU_PIN			       5
+#define MODE_PIN   			 21
+#define STANDBY_PIN  		 33
+#define SNOOZE_PIN			 16
+#define MENU_PIN			    5
 
 // ***************************************************************************
 // Other settings

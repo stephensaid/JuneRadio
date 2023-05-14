@@ -2,7 +2,6 @@
 
 void setup() {
   Serial.begin(115200);             // Serial monitor setup
-  // Serial.begin(250000);             // Serial monitor setup
   Serial.println(F("\r\nsetup(): begin"));
 
   Serial.print("C++ version: ");
@@ -40,7 +39,7 @@ void setup() {
 
   if (DEBUG_INFO) {
     Serial.println("\n\n---- Listing files ----\n");
-    listAllFiles();
+    fex.listSPIFFS();
   }
 
   /*
@@ -66,14 +65,16 @@ void setup() {
   // con.resetConfig();
 
   // Dump config file
-  if (DEBUG_INFO) Serial.println(F("\nPrint config file..."));
-  con.printConfig();
+  if (DEBUG_INFO) {
+    Serial.println(F("\nPrint config file..."));
+    con.printConfig();
+  }
 
   //Print the wakeup reason for ESP32
   print_wakeup_reason();
 
   // ezEvents debug mode - uncomment the following line
-  setDebug(INFO);
+  if (DEBUG_INFO) setDebug(INFO);
 
   // tft.begin(0x9341);                    // TFT Display
   tft.init();
@@ -125,17 +126,4 @@ void setup() {
 
 void loop() {
   events();
-  // char run = 0;
-  //
-  // if( Serial.available() )  run = Serial.read();
-  //
-  // switch (run)
-  // {
-    //   case '1':
-    //   if (DEBUG_DEBUG) Serial.println("WiFi closing down...");
-    //   WiFi.disconnect(true);
-    //   break;
-    // }
-    //
-    // if ( run != 0 ) run = 0;
 }
