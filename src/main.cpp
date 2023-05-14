@@ -39,7 +39,7 @@ void setup() {
 
   if (DEBUG_INFO) {
     Serial.println("\n\n---- Listing files ----\n");
-    listAllFiles();
+    fex.listSPIFFS();
   }
 
   /*
@@ -65,14 +65,16 @@ void setup() {
   // con.resetConfig();
 
   // Dump config file
-  if (DEBUG_INFO) Serial.println(F("\nPrint config file..."));
-  con.printConfig();
+  if (DEBUG_INFO) {
+    Serial.println(F("\nPrint config file..."));
+    con.printConfig();
+  }
 
   //Print the wakeup reason for ESP32
   print_wakeup_reason();
 
   // ezEvents debug mode - uncomment the following line
-  setDebug(INFO);
+  if (DEBUG_INFO) setDebug(INFO);
 
   // tft.begin(0x9341);                    // TFT Display
   tft.init();
