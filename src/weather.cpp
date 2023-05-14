@@ -57,7 +57,7 @@ String getWeatherIcon(String icon) {
 
   if (DEBUG_INFO) {
     Serial.print("JPG: ");
-    Serial.println("/weather/" + icon_return + " - " + bg +".jpg");
+    Serial.println("/weather/" + icon_return + "-" + bg +".jpg");
   }
   return "/weather/" + icon_return + "-" + bg +".jpg";
 }
