@@ -18,10 +18,10 @@ extern void btnModePressed();
 extern void btnWeatherPressed();
 extern void btnWeatherExit();
 extern void btnVolumePressed();
-extern void volumeChanged(ESPRotary& r);
+extern void volumeChanged(ESPRotary &r);
 extern void btnSelectorPressed();
 extern void btnMenuSelect();
-extern void selectorChanged(ESPRotary& r);
+extern void selectorChanged(ESPRotary &r);
 extern void callFormatSPIFFS();
 
 int dir;
@@ -31,14 +31,23 @@ int dir;
 // Paramters : Menu item (enum)
 // Returns   : String: menu name
 /*******************************************************/
-String items_main (menu_main m) {
+String items_main(menu_main m)
+{
   String result;
   yield();
-  if ( m >= m_main_LAST || m < 1 ) return "";
-  switch (m) {
-    case m_stations:          result = "Saved stations";  break;
-    case m_alarm:             result = "Alarms";          break;
-    case m_settings:          result = "Settings";        break;
+  if (m >= m_main_LAST || m < 1)
+    return "";
+  switch (m)
+  {
+  case m_stations:
+    result = "Saved stations";
+    break;
+  case m_alarm:
+    result = "Alarms";
+    break;
+  case m_settings:
+    result = "Settings";
+    break;
   }
   return result;
 }
@@ -48,15 +57,27 @@ String items_main (menu_main m) {
 // Paramters : Menu item (enum)
 // Returns   : String: menu name
 /*******************************************************/
-String items_settings (menu_settings m) {
+String items_settings(menu_settings m)
+{
   String result;
   yield();
-  switch (m) {
-    case m_wifi:              result = "Wi-Fi";           break;
-    case m_themes:            result = "Themes";          break;
-    case m_timeFormat:        result = "Time Format";     break;
-    case m_screenTimeout:     result = "Screen timeout";  break;
-    case m_weatherTimeout:    result = "Weather timeout"; break;
+  switch (m)
+  {
+  case m_wifi:
+    result = "Wi-Fi";
+    break;
+  case m_themes:
+    result = "Themes";
+    break;
+  case m_timeFormat:
+    result = "Time Format";
+    break;
+  case m_screenTimeout:
+    result = "Screen timeout";
+    break;
+  case m_weatherTimeout:
+    result = "Weather timeout";
+    break;
   }
   return result;
 }
@@ -66,13 +87,21 @@ String items_settings (menu_settings m) {
 // Paramters : Menu item (enum)
 // Returns   : String: menu name
 /*******************************************************/
-String items_alarms (menu_alarms m) {
+String items_alarms(menu_alarms m)
+{
   String result;
   yield();
-  switch (m) {
-    case m_alarm1:            result = "Alarm 1";         break;
-    case m_alarm2:            result = "Alarm 2";         break;
-    case m_alarm3:            result = "Alarm 3";         break;
+  switch (m)
+  {
+  case m_alarm1:
+    result = "Alarm 1";
+    break;
+  case m_alarm2:
+    result = "Alarm 2";
+    break;
+  case m_alarm3:
+    result = "Alarm 3";
+    break;
   }
   return result;
 }
@@ -84,7 +113,8 @@ String items_alarms (menu_alarms m) {
 //           : menus m        : default - main menu
 // Returns   : void
 /*******************************************************/
-void menu( int d, boolean click, menus m) {
+void menu(int d, boolean click, menus m)
+{
   String strThis = "",
          strPrev = "",
          strNext = "";
@@ -92,87 +122,103 @@ void menu( int d, boolean click, menus m) {
   static int p = 0;
   yield();
 
-  if (click == true) {
-      p = 0;
-      // menu item selected
-      tft.fillScreen(con.element.BG_COLOUR);
-      paintTopbar();
-      drawKnob();
-      tft.fillRect(28, 38, 200, 40, con.element.BG_COLOUR);
-      tft.loadFont(F36L);
+  if (click == true)
+  {
+    p = 0;
+    // menu item selected
+    tft.fillScreen(con.element.BG_COLOUR);
+    paintTopbar();
+    drawKnob();
+    tft.fillRect(28, 38, 200, 40, con.element.BG_COLOUR);
+    tft.loadFont(F36L);
 
-      tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
+    tft.setTextColor(con.element.HIGHLIGHT_COLOUR, con.element.BG_COLOUR);
 
-      switch (curMenu) {
-        case ms_main:
-          // load the menu
-          Serial.print("Menu name: "); Serial.println(menu_main_name);
-          tft.drawString(menu_main_name, 30, 40);
-          tft.unloadFont();
-          menu(0, false, ms_main);
-          break;
-        case ms_settings:
-          // load the menu
-          Serial.print("Menu name: "); Serial.println(menu_settings_name);
-          tft.drawString(menu_settings_name, 30, 40);
-          tft.unloadFont();
-          menu(0, false, ms_settings);
-          break;
-        case ms_alarms:
-          menu(0, false, ms_alarms);
-          break;
-      }
-} else {
-      Serial.println("Not clicked");
-      curMenu = m;
-      p = p + d;
-      if (p < 1) p = 1;
-      Serial.print("p : "); Serial.println(p);
-
-      switch (m) {
-        case ms_main:
-          if (menu_main(p) > m_main_LAST) {
-            p = m_main_LAST;
-          } else {
-            Serial.print("p + 1 : "); Serial.println(p + 1);
-            strNext = items_main(menu_main(p + 1));
-          }
-
-          strThis = items_main(menu_main(p));
-          if (p > 1) strPrev = items_main(menu_main(p - 1));
-
-
-          break;
-        case ms_settings:
-
-
-          break;
-        case ms_alarms:
-          break;
-      }
-
-      // generate menu
-      Serial.print("strPrev: "); Serial.println(strPrev);
-      Serial.print("strThis: "); Serial.println(strThis);
-      Serial.print("strNext: "); Serial.println(strNext);
-
-      tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
-
-      tft.loadFont(F18L);
-      tft.fillRect(80, 93, 210, 25, con.element.BG_COLOUR);
-      tft.drawString(strPrev, 70, 95);
-
-      tft.fillRect(80, 178, 210, 25, con.element.BG_COLOUR);
-      tft.drawString(strNext, 70, 180);
+    switch (curMenu)
+    {
+    case ms_main:
+      // load the menu
+      Serial.print("Menu name: ");
+      Serial.println(menu_main_name);
+      tft.drawString(menu_main_name, 30, 40);
       tft.unloadFont();
-
-      tft.loadFont(F24L);
-      tft.fillRect(90, 133, 210, 25, con.element.BG_COLOUR);
-      tft.drawString(strThis, 90, 135);
+      menu(0, false, ms_main);
+      break;
+    case ms_settings:
+      // load the menu
+      Serial.print("Menu name: ");
+      Serial.println(menu_settings_name);
+      tft.drawString(menu_settings_name, 30, 40);
       tft.unloadFont();
+      menu(0, false, ms_settings);
+      break;
+    case ms_alarms:
+      menu(0, false, ms_alarms);
+      break;
+    }
+  }
+  else
+  {
+    Serial.println("Not clicked");
+    curMenu = m;
+    p = p + d;
+    if (p < 1)
+      p = 1;
+    Serial.print("p : ");
+    Serial.println(p);
+
+    switch (m)
+    {
+    case ms_main:
+      if (menu_main(p) > m_main_LAST)
+      {
+        p = m_main_LAST;
+      }
+      else
+      {
+        Serial.print("p + 1 : ");
+        Serial.println(p + 1);
+        strNext = items_main(menu_main(p + 1));
+      }
+
+      strThis = items_main(menu_main(p));
+      if (p > 1)
+        strPrev = items_main(menu_main(p - 1));
+
+      break;
+    case ms_settings:
+
+      break;
+    case ms_alarms:
+      break;
+    }
+
+    // generate menu
+    Serial.print("strPrev: ");
+    Serial.println(strPrev);
+    Serial.print("strThis: ");
+    Serial.println(strThis);
+    Serial.print("strNext: ");
+    Serial.println(strNext);
+
+    tft.setTextColor(con.element.FG_COLOUR, con.element.BG_COLOUR);
+
+    tft.loadFont(F18L);
+    tft.fillRect(80, 93, 210, 25, con.element.BG_COLOUR);
+    tft.drawString(strPrev, 70, 95);
+
+    tft.fillRect(80, 178, 210, 25, con.element.BG_COLOUR);
+    tft.drawString(strNext, 70, 180);
+    tft.unloadFont();
+
+    tft.loadFont(F24L);
+    tft.fillRect(90, 133, 210, 25, con.element.BG_COLOUR);
+    tft.drawString(strThis, 90, 135);
+    tft.unloadFont();
   }
 
-  if (GRID_ON) grid(10);
+  if (GRID_ON)
+    grid(10);
 }
 
 /*******************************************************/
@@ -180,7 +226,8 @@ void menu( int d, boolean click, menus m) {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void invokeMainMenu() {
+void invokeMainMenu()
+{
   resetTFTlight();
   setButtonDefaultInMenu();
   menu(0, true, ms_main);
@@ -191,7 +238,8 @@ void invokeMainMenu() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void exitMainMenu() {
+void exitMainMenu()
+{
   resetTFTlight();
   setButtonDefaultOn();
   clearScreen();
@@ -203,7 +251,8 @@ void exitMainMenu() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void menuSelect() {
+void menuSelect()
+{
   menu(0);
 }
 
@@ -212,13 +261,16 @@ void menuSelect() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void rotMenuBrowse(ESPRotary & r) {
-  Serial.print("Direction: "); Serial.println (r.getDirection());
+void rotMenuBrowse(ESPRotary &r)
+{
+  Serial.print("Direction: ");
+  Serial.println(r.getDirection());
   r.getDirection() == 255 ? dir = -1 : dir = 1;
   setEvent(menuBrowse, now(), LOCAL_TIME);
 }
 
-void menuBrowse() {
+void menuBrowse()
+{
   menu(dir);
 }
 
@@ -228,7 +280,8 @@ void menuBrowse() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void setButtonDefaultInMenu() {
+void setButtonDefaultInMenu()
+{
   btnStandby.onPressed(disableControl);
   btnMenu.onPressed(btnExitMainMenu);
   btnMode.onPressed(disableControl);
@@ -243,7 +296,8 @@ void setButtonDefaultInMenu() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void setButtonDefaultOff() {
+void setButtonDefaultOff()
+{
   btnSnooze.onPressed(btnWeatherPressed);
   btnMode.onPressed(disableControl);
   btnMenu.onPressed(btnMenuPressed);
@@ -264,7 +318,8 @@ void setButtonDefaultOff() {
 // Paramters : None
 // Returns   : None
 /*******************************************************/
-void setButtonDefaultOn() {
+void setButtonDefaultOn()
+{
   btnSnooze.onPressed(btnWeatherPressed);
   btnMode.onPressed(btnModePressed);
   btnMenu.onPressed(btnMenuPressed);
@@ -277,10 +332,12 @@ void setButtonDefaultOn() {
   volume.setChangedHandler(volumeChanged);
 }
 
-void disableControl() {
+void disableControl()
+{
   // do nothing
 }
 
-void disableControl(ESPRotary & r) {
+void disableControl(ESPRotary &r)
+{
   // do nothing
 }
